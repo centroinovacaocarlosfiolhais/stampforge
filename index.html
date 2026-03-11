@@ -55,9 +55,10 @@ header{
 }
 label.tiny{color:var(--dim);font-size:10px;white-space:nowrap}
 .export-btn{
-  height:46px;padding:0 22px;background:var(--acc);color:#000;font-weight:700;
-  border:none;border-radius:5px;cursor:pointer;font-family:var(--mono);font-size:14px;
-  letter-spacing:2px;transition:.15s;white-space:nowrap;
+  height:36px;padding:0 12px;background:var(--acc);color:#000;font-weight:700;
+  border:none;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:11px;
+  letter-spacing:1px;transition:.15s;white-space:nowrap;
+  font-variant-emoji:text;
 }
 .export-btn:hover{background:var(--acc2)}
 .export-btn:disabled{background:var(--acc-dim);color:var(--dim);cursor:default}
@@ -90,6 +91,7 @@ main{display:flex;height:calc(100vh - 46px);overflow:hidden}
 }
 #drawCanvas{display:block;cursor:crosshair}
 #overlayCanvas{position:absolute;top:0;left:0;pointer-events:none;cursor:inherit}
+#svgBadge{position:absolute;top:8px;right:8px;background:rgba(255,140,0,.9);color:#000;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 7px;border-radius:3px;display:none;z-index:10;cursor:pointer;}#svgBadge.active{display:block}
 .canvas-label{
   position:absolute;bottom:-22px;left:0;width:100%;text-align:center;
   color:var(--dim);font-size:10px;letter-spacing:1px;
@@ -121,16 +123,7 @@ main{display:flex;height:calc(100vh - 46px);overflow:hidden}
   outline:none;border-color:var(--acc);
 }
 .field input[type=checkbox]{accent-color:var(--acc);width:14px;height:14px}
-.upload-btn{
-  width:100%;height:30px;background:var(--s3);border:1px dashed var(--border);
-  color:var(--dim);border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:11px;
-  transition:.15s;
-}
-.upload-btn:hover{border-color:var(--acc);color:var(--acc)}
-.profile-name{
-  margin-top:6px;font-size:10px;color:var(--green);min-height:14px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
+
 .info-box{
   background:var(--s3);border-radius:4px;padding:8px;font-size:10px;
   color:var(--dim);line-height:1.6;
@@ -143,7 +136,6 @@ main{display:flex;height:calc(100vh - 46px);overflow:hidden}
   background:var(--s2);border-radius:4px;overflow:hidden;
   min-height:120px;position:relative;
 }
-#previewCanvas{border-radius:4px}
 .preview-tag{
   position:absolute;top:4px;left:4px;font-size:9px;color:var(--acc);
   letter-spacing:1px;background:rgba(9,9,11,.7);padding:2px 5px;border-radius:2px;
@@ -205,6 +197,53 @@ main{display:flex;height:calc(100vh - 46px);overflow:hidden}
 
 input[type=file]{display:none}
 
+
+/* ── Floating stamp preview ─────────────────────── */
+/* stamp preview removed */
+
+/* ── SVG Import Modal ────────────────────────────── */
+#svgModal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);align-items:center;justify-content:center}
+#svgModal.open{display:flex}
+#svgBox{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:24px;width:500px;max-width:96vw;font-family:var(--mono);display:flex;flex-direction:column;gap:14px}
+#svgBox h2{margin:0;font-size:13px;letter-spacing:2px;color:var(--acc);font-weight:700}
+#svgPreviewWrap{background:var(--bg);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;height:220px;overflow:hidden;position:relative}
+#svgPreviewWrap svg{max-width:100%;max-height:100%}
+.svg-controls{display:flex;flex-direction:column;gap:8px}
+.svg-row{display:flex;gap:8px;align-items:center}
+.svg-row label{font-size:11px;color:var(--dim);width:120px;flex-shrink:0}
+.svg-row input[type=range]{flex:1;accent-color:var(--acc)}
+.svg-row span{font-size:11px;color:var(--fg);width:48px;text-align:right}
+#svgConfirmBtn{background:var(--acc);color:#000;height:36px;border:none;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;flex:1}
+#svgCancelBtn{background:var(--s3);color:var(--dim);border:1px solid var(--border);height:36px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px;flex:1}
+
+/* ── Layer Preview Modal ─────────────────────────── */
+#layerModal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);align-items:center;justify-content:center}
+#layerModal.open{display:flex}
+#layerBox{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:20px;width:580px;max-width:96vw;font-family:var(--mono);display:flex;flex-direction:column;gap:12px}
+#layerBox h2{margin:0;font-size:13px;letter-spacing:2px;color:#4fc;font-weight:700}
+#layerCanvas{background:var(--bg);border:1px solid var(--border);border-radius:4px;display:block;width:100%;max-height:380px}
+.layer-ctrl{display:flex;gap:10px;align-items:center}
+.layer-ctrl label{font-size:11px;color:var(--dim);white-space:nowrap}
+#layerSlider{flex:1;accent-color:#4fc}
+#layerNum{font-size:13px;color:#4fc;font-weight:700;width:80px;text-align:center}
+.layer-legend{display:flex;gap:14px;font-size:10px}
+.leg{display:flex;align-items:center;gap:4px}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+#layerCloseBtn{background:var(--s3);color:var(--dim);border:1px solid var(--border);height:34px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1px}
+.layer-stats{display:flex;gap:16px;font-size:10px;color:var(--dim)}
+.layer-stats span{color:var(--fg);font-weight:700}
+
+/* ── Credits footer ──────────────────────────────── */
+#creditsBar{
+  position:fixed;bottom:0;left:0;right:0;height:18px;
+  background:rgba(9,9,11,.92);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:9px;color:rgba(120,120,110,.55);
+  letter-spacing:1px;z-index:10;pointer-events:none;
+}
+#creditsBar em{color:rgba(200,150,50,.6);font-style:normal}
+
+
 /* scrollbar */
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:var(--s1)}
@@ -233,7 +272,7 @@ input[type=file]{display:none}
     <button class="tool-btn"        onclick="undoAction()"   title="Undo [Ctrl+Z]">↩</button>
     <button class="tool-btn"        onclick="redoAction()"   title="Redo [Ctrl+Y]">↪</button>
     <button class="tool-btn"        onclick="clearCanvas()"  title="Clear">🗑</button>
-    <button class="tool-btn"        onclick="importImage()"  title="Import image">⬆</button>
+    <button class="tool-btn"        onclick="importImage()"  title="Import raster image">⬆</button><button class="tool-btn" onclick="openSvgImport()" title="Import SVG" style="color:var(--acc);font-size:9px;font-weight:700;letter-spacing:0.5px">⬆SVG</button>
     <div class="sep"></div>
     <button class="tool-btn" id="sym-h" onclick="toggleSym('h')" title="Horizontal symmetry axis (draw top/bottom mirror)">⇕</button>
     <button class="tool-btn" id="sym-v" onclick="toggleSym('v')" title="Vertical symmetry axis (draw left/right mirror)">⇔</button>
@@ -247,7 +286,7 @@ input[type=file]{display:none}
     <input type="number" class="size-inp" id="brushSize" value="4" min="1" max="60" oninput="updateBrush()">
   </div>
   <div class="sep"></div>
-  <button class="export-btn" style="background:var(--s3);color:var(--acc);border:1px solid var(--acc)" onclick="exportSVG()">▼ SVG</button><button class="export-btn" onclick="exportSTL()">▼ EXPORT STL</button><button class="export-btn" id="gcodeBtn" style="background:var(--s3);color:#4fc;border:1px solid #4fc" onclick="exportGcode()">▼ GCODE</button><button class="export-btn" id="usbPrintBtn" style="background:var(--s3);color:#f80;border:1px solid #f80" onclick="openPrintModal()">⚡ PRINT USB</button>
+  <button class="export-btn" style="background:var(--s3);color:#aaa;border:1px solid #555" onclick="saveProject()" title="Save project">💾</button><button class="export-btn" style="background:var(--s3);color:#aaa;border:1px solid #555" onclick="loadProject()" title="Load project">📂</button><button class="export-btn" style="background:var(--s3);color:var(--acc);border:1px solid var(--acc)" onclick="exportSVG()">SVG</button><button class="export-btn" id="stlBtn" onclick="exportSTL()">STL</button><button class="export-btn" id="layerPreviewBtn" style="background:var(--s3);color:#4fc;border:1px solid #4fc" onclick="openLayerPreview()">PREV</button><button class="export-btn" id="gcodeBtn" style="background:var(--s3);color:#4fc;border:1px solid #4fc" onclick="exportGcode()">GCODE</button><button class="export-btn" id="usbPrintBtn" style="background:var(--s3);color:#f80;border:1px solid #f80" onclick="openPrintModal()">USB</button>
 </header>
 
 <!-- ─── MAIN ───────────────────────────────── -->
@@ -257,10 +296,14 @@ input[type=file]{display:none}
     <span id="projectTitle" contenteditable="true" spellcheck="false" title="Click to rename project">untitled</span>
     <div class="canvas-frame" id="canvasFrame">
       <canvas id="drawCanvas"></canvas>
+      <canvas id="svgCanvas" style="position:absolute;top:0;left:0;pointer-events:none"></canvas>
       <canvas id="overlayCanvas"></canvas>
       <div class="canvas-label" id="canvasLabel">60 × 60 mm</div>
+      <div id="svgBadge" title="SVG vector activo — clica para remover" onclick="clearSvgSource()">⬆ SVG VECTOR</div>
     </div>
     <div class="zoom-info" id="zoomInfo">100%</div>
+
+
   </div>
 
   <!-- Right Panel -->
@@ -288,6 +331,7 @@ input[type=file]{display:none}
       <div class="field"><label>Design layers</label><input type="number" id="designLayers" value="2" min="1" max="3" step="1"></div>
       <div class="field"><label>Mirror for stamp</label><input type="checkbox" id="mirrorX" checked></div>
       <div class="field"><label>Include base plate</label><input type="checkbox" id="includeBase" checked></div>
+      <div class="field"><label>Perimeters</label><input type="number" id="numPerimeters" value="2" min="1" max="5" step="1" title="Number of perimeter shells"></div>
       <div class="field"><label>Simplify (px)</label><input type="number" id="simplifyEps" value="0.8" min="0" max="5" step="0.1"></div>
       <div class="field" style="flex-direction:column;gap:4px;align-items:stretch">
         <div style="display:flex;justify-content:space-between;align-items:center">
@@ -299,17 +343,6 @@ input[type=file]{display:none}
           oninput="document.getElementById('chaikinVal').textContent=this.value+' pass'+(this.value==1?'':'es')">
       </div>
     </div>
-
-    <!-- Cura profile import -->
-    <div class="panel-section">
-      <div class="section-title">📂 Cura Profile</div>
-      <button class="upload-btn" onclick="document.getElementById('curaFile').click()">
-        Load .json / .cfg profile
-      </button>
-      <input type="file" id="curaFile" accept=".json,.cfg,.inst.cfg" onchange="loadCuraProfile(this)">
-      <div class="profile-name" id="profileName">— no profile loaded —</div>
-    </div>
-
 
     <!-- Printer profile -->
     <div class="panel-section">
@@ -357,17 +390,7 @@ input[type=file]{display:none}
       </div>
     </div>
 
-    <!-- Stamp preview -->
-    <div class="panel-section" style="flex:1">
-      <div class="section-title">👕 Stamp Impression</div>
-      <div class="preview-wrap">
-        <canvas id="previewCanvas" width="200" height="200"></canvas>
-        <div class="preview-tag">FABRIC PREVIEW</div>
-      </div>
-      <div style="margin-top:8px;font-size:10px;color:var(--dim);line-height:1.5">
-        Simulated ink impression on fabric. Mirror is applied automatically.
-      </div>
-    </div>
+
 
   </div><!-- /panel -->
 </main>
@@ -410,6 +433,87 @@ input[type=file]{display:none}
     </div>
   </div>
 </div>
+
+<!-- ── SVG Import Modal ───────────────────────── -->
+<div id="svgModal">
+  <div id="svgBox">
+    <h2>⬆ IMPORT SVG</h2>
+    <div id="svgPreviewWrap"><span style="color:var(--dim);font-size:11px">no file loaded</span></div>
+    <div class="svg-controls">
+      <div class="svg-row">
+        <label>Scale</label>
+        <input type="range" id="svgScale" min="5" max="200" value="100" oninput="svgUpdatePreview()">
+        <span id="svgScaleVal">100%</span>
+      </div>
+      <div class="svg-row">
+        <label>Position X</label>
+        <input type="range" id="svgOffX" min="-100" max="100" value="0" oninput="svgUpdatePreview()">
+        <span id="svgOffXVal">0%</span>
+      </div>
+      <div class="svg-row">
+        <label>Position Y</label>
+        <input type="range" id="svgOffY" min="-100" max="100" value="0" oninput="svgUpdatePreview()">
+        <span id="svgOffYVal">0%</span>
+      </div>
+      <div class="svg-row">
+        <label>Invert colours</label>
+        <input type="checkbox" id="svgInvert" onchange="svgUpdatePreview()" style="accent-color:var(--acc)">
+      </div>
+      <!-- Bitmap threshold — only shown when bitmap mode is hovered/active -->
+      <div class="svg-row" id="svgThreshRow" style="display:none">
+        <label>B&amp;W threshold</label>
+        <input type="range" id="svgThresh" min="10" max="245" value="128" oninput="svgUpdatePreview()">
+        <span id="svgThreshVal">128</span>
+      </div>
+    </div>
+    <!-- Mode selector -->
+    <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:2px">
+      <button id="svgModeVec" onclick="setSvgMode('vector')"
+        style="flex:1;height:34px;border:none;cursor:pointer;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;
+               background:var(--acc);color:#000;transition:.15s">
+        ⬆ IMPORTAR SVG
+      </button>
+      <button id="svgModeBmp" onclick="setSvgMode('bitmap')"
+        style="flex:1;height:34px;border:none;cursor:pointer;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;
+               background:var(--s3);color:var(--dim);border-left:1px solid var(--border);transition:.15s">
+        🖼 CONVERTER BITMAP
+      </button>
+    </div>
+    <div id="svgModeDesc" style="font-size:9px;color:var(--dim);line-height:1.5;padding:2px 1px">
+      SVG vector: mantém qualidade máxima na exportação STL/GCODE. Não editável com ferramentas de desenho.
+    </div>
+    <div class="svg-row" style="margin-top:4px">
+      <button id="svgConfirmBtn" onclick="svgConfirm()">✓ CONFIRMAR</button>
+      <button id="svgCancelBtn"  onclick="document.getElementById('svgModal').classList.remove('open')">✕ CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Layer Preview Modal ───────────────────── -->
+<div id="layerModal">
+  <div id="layerBox">
+    <h2>◈ LAYER PREVIEW</h2>
+    <canvas id="layerCanvas" width="540" height="380"></canvas>
+    <div class="layer-ctrl">
+      <label>Layer</label>
+      <input type="range" id="layerSlider" min="1" value="1" oninput="layerDraw(+this.value)">
+      <span id="layerNum">1 / —</span>
+    </div>
+    <div class="layer-legend">
+      <div class="leg"><div class="leg-dot" style="background:#f80"></div>Perimeter</div>
+      <div class="leg"><div class="leg-dot" style="background:#4fc"></div>Infill</div>
+      <div class="leg"><div class="leg-dot" style="background:rgba(255,80,80,.4)"></div>Travel</div>
+      <div class="leg"><div class="leg-dot" style="background:#666"></div>Base</div>
+    </div>
+    <div class="layer-stats">
+      Total layers: <span id="lsTotalLayers">—</span>&nbsp;&nbsp;
+      Filament: <span id="lsFilament">—</span> mm&nbsp;&nbsp;
+      Est. time: <span id="lsTime">—</span>
+    </div>
+    <button id="layerCloseBtn" onclick="document.getElementById('layerModal').classList.remove('open')">✕ CLOSE</button>
+  </div>
+</div>
+<div id="creditsBar">Idealized &amp; developed by <em>vibe coding with claude.ai</em> &nbsp;·&nbsp; Centro de Inovação Carlos Fiolhais &nbsp;·&nbsp; CDI Portugal &nbsp;·&nbsp; Março 2026</div>
 <div id="toast">STL EXPORTED</div>
 
 <!-- Text input overlay (hidden) -->
@@ -437,6 +541,8 @@ const MAX_UNDO = 30;
 // Canvas
 const canvas = document.getElementById('drawCanvas');
 const overlay = document.getElementById('overlayCanvas');
+const svgc    = document.getElementById('svgCanvas');
+const svgctx  = svgc.getContext('2d');
 const ctx = canvas.getContext('2d');
 const octx = overlay.getContext('2d');
 
@@ -458,6 +564,7 @@ function getSettings() {
     mirrorX:     document.getElementById('mirrorX').checked,
     includeBase:  document.getElementById('includeBase').checked,
     simplifyEps:  parseFloat(document.getElementById('simplifyEps').value) || 0.8,
+    numPerimeters: parseInt(document.getElementById('numPerimeters').value) || 2,
     chaikinPasses: parseInt(document.getElementById('chaikinPasses').value) ?? 3,
     resolution:  parseInt(document.getElementById('canvasRes').value) || 600,
     gcTempNozzle: parseFloat(document.getElementById('gcTempNozzle').value) || 215,
@@ -477,6 +584,8 @@ function initCanvas(size) {
   canvas.height = size;
   overlay.width = size;
   overlay.height = size;
+  svgc.width = size;
+  svgc.height = size;
   ctx.fillStyle = '#f5f5f0';
   ctx.fillRect(0, 0, size, size);
   fitCanvas();
@@ -501,6 +610,11 @@ function fitCanvas() {
   overlay.style.position = 'absolute';
   overlay.style.top = '0';
   overlay.style.left = '0';
+  svgc.style.width  = dispW + 'px';
+  svgc.style.height = dispH + 'px';
+  svgc.style.position = 'absolute';
+  svgc.style.top = '0';
+  svgc.style.left = '0';
   const frame = document.getElementById('canvasFrame');
   frame.style.width  = dispW + 'px';
   frame.style.height = dispH + 'px';
@@ -524,6 +638,8 @@ function updateDimensions() {
   canvas.height = newSize;
   overlay.width = newSize;
   overlay.height = newSize;
+  svgc.width = newSize;
+  svgc.height = newSize;
   ctx.fillStyle = '#f5f5f0';
   ctx.fillRect(0, 0, newSize, newSize);
   ctx.drawImage(offscreen, 0, 0, newSize, newSize);
@@ -573,7 +689,6 @@ function getPos(e) {
 }
 
 // ─── Drawing handlers ─────────────────────────────────
-// Events on the draw canvas — overlay has pointer-events:none so it must NOT receive events
 canvas.addEventListener('mousedown', onDown);
 canvas.addEventListener('mousemove', onMove);
 canvas.addEventListener('mouseup', onUp);
@@ -583,7 +698,9 @@ canvas.addEventListener('touchmove',  e => { e.preventDefault(); onMove(e); }, {
 canvas.addEventListener('touchend',   e => { e.preventDefault(); onUp(e);   }, {passive:false});
 
 // Single safe refresh — no recursion
-function refreshUI() { updatePreview(); updateInfo(); drawSymmetryGuides(); }
+function refreshUI() {
+  updateInfo(); drawSymmetryGuides();
+}
 
 // ─── Symmetry guide overlay ────────────────────────────
 function toggleSym(axis) {
@@ -600,16 +717,15 @@ function drawSymmetryGuides() {
   octx.setLineDash([6, 4]);
   octx.lineWidth = 1;
   octx.strokeStyle = 'rgba(240,112,32,0.6)';
-  if (symV) { // vertical axis = left/right mirror = vertical line at centre
+  if (symV) {
     octx.beginPath(); octx.moveTo(W/2, 0); octx.lineTo(W/2, H); octx.stroke();
   }
-  if (symH) { // horizontal axis = top/bottom mirror = horizontal line at centre
+  if (symH) {
     octx.beginPath(); octx.moveTo(0, H/2); octx.lineTo(W, H/2); octx.stroke();
   }
   octx.restore();
 }
 
-// Apply a stroke to ctx, plus mirrored copies if symmetry is on
 function strokeLine(x0, y0, x1, y1) {
   const W = canvas.width, H = canvas.height;
   applyStrokeStyle();
@@ -655,7 +771,6 @@ function onMove(e) {
     strokeLine(startX, startY, p.x, p.y);
     startX = p.x; startY = p.y;
   } else {
-    // Shape preview — restore then draw all mirror copies
     ctx.putImageData(savedImageData, 0, 0);
     strokeShape(tool, startX, startY, p.x, p.y);
   }
@@ -676,7 +791,7 @@ function onUp(e) {
 function applyStrokeStyle() {
   ctx.globalCompositeOperation = 'source-over';
   if (tool === 'eraser') {
-    ctx.strokeStyle = '#f5f5f0';  // paint background color — transparent-safe
+    ctx.strokeStyle = '#f5f5f0';
     ctx.lineWidth = brushSize * 3;
   } else {
     ctx.strokeStyle = color;
@@ -785,9 +900,15 @@ function redoAction() {
 }
 
 function clearCanvas() {
+  // Clear bitmap
   pushUndo();
   ctx.fillStyle = '#f5f5f0';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Clear SVG layer fully
+  _svgActive = false; _svgSrc = null; _svgPlacement = null; _svgImg = null;
+  svgctx.clearRect(0, 0, svgc.width, svgc.height);
+  const badge = document.getElementById('svgBadge');
+  if (badge) badge.classList.remove('active');
   refreshUI();
 }
 
@@ -817,76 +938,11 @@ function importImage() {
   inp.click();
 }
 
-// ══════════════════════════════════════════════════════
-//  PREVIEW — simulated stamp impression
-// ══════════════════════════════════════════════════════
-function updatePreview() {
-  const prev = document.getElementById('previewCanvas');
-  const pctx = prev.getContext('2d');
-  const s = getSettings();
 
-  // Draw fabric-like texture
-  pctx.fillStyle = '#e8ddd0';
-  pctx.fillRect(0, 0, 200, 200);
-  // Fabric grain
-  for (let i = 0; i < 200; i += 3) {
-    pctx.strokeStyle = `rgba(0,0,0,${Math.random()*0.04})`;
-    pctx.beginPath(); pctx.moveTo(i, 0); pctx.lineTo(i, 200); pctx.stroke();
-    pctx.beginPath(); pctx.moveTo(0, i); pctx.lineTo(200, i); pctx.stroke();
-  }
-
-  // Get canvas image, mirror if needed, render as ink
-  const offscreen = document.createElement('canvas');
-  offscreen.width = 200; offscreen.height = 200;
-  const octx2 = offscreen.getContext('2d');
-  if (s.mirrorX) {
-    octx2.translate(200, 0);
-    octx2.scale(-1, 1);
-  }
-  octx2.drawImage(canvas, 0, 0, 200, 200);
-
-  // Apply ink effect
-  const id = octx2.getImageData(0, 0, 200, 200);
-  const d = id.data;
-  for (let i = 0; i < d.length; i += 4) {
-    const bright = (d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114);
-    if (bright < 200 && d[i+3] > 100) {
-      // Ink-like: dark blue/black with slight variation
-      d[i]   = Math.max(0, d[i]   * 0.3 + Math.random()*10);
-      d[i+1] = Math.max(0, d[i+1] * 0.3 + Math.random()*10);
-      d[i+2] = Math.max(0, d[i+2] * 0.3 + 20 + Math.random()*15);
-      d[i+3] = 180 + Math.random() * 60;
-    } else {
-      d[i+3] = 0; // transparent = fabric shows through
-    }
-  }
-  octx2.putImageData(id, 0, 0);
-  pctx.drawImage(offscreen, 0, 0);
-}
 
 // ══════════════════════════════════════════════════════
 //  CURA PROFILE PARSER
 // ══════════════════════════════════════════════════════
-function loadCuraProfile(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const text = e.target.result;
-    let settings = {};
-    // Try JSON first (Cura 4+ machine/quality profiles)
-    try {
-      const json = JSON.parse(text);
-      settings = parseCuraJSON(json);
-    } catch {
-      // Fall back to INI/CFG format
-      settings = parseCuraCFG(text);
-    }
-    applyCuraSettings(settings, file.name);
-  };
-  reader.readAsText(file);
-}
-
 function parseCuraJSON(json) {
   const out = {};
   const overrides = json.overrides || json.settings || {};
@@ -903,17 +959,12 @@ function parseCuraJSON(json) {
         if (k === 'machine_depth')
           out.maxH = parseFloat(val);
       }
-      // recurse into nested settings
       if (typeof v === 'object' && v !== null && !Array.isArray(v) && v.children) {
         extract(v.children);
       }
     }
   };
   extract(overrides);
-  // Also check metadata
-  if (json.metadata) {
-    if (json.metadata.quality_type) {} // could use this
-  }
   return out;
 }
 
@@ -944,9 +995,6 @@ function applyCuraSettings(s, filename) {
     document.getElementById('nozzleD').value = s.nozzle.toFixed(2);
     applied.push(`nozzle=${s.nozzle}`);
   }
-  const name = filename.replace(/\.(json|cfg|inst\.cfg)$/i, '');
-  document.getElementById('profileName').textContent =
-    applied.length ? `✓ ${name}` : `⚠ No compatible settings in ${name}`;
   updateInfo();
   showToast(applied.length ? `PROFILE LOADED: ${applied.join(' | ')}` : 'NO SETTINGS FOUND');
 }
@@ -966,7 +1014,6 @@ function earcut(data, holeIndices, dim = 2) {
 
     if (hasHoles) outerNode = eliminateHoles(data, holeIndices, outerNode, dim);
 
-    // if the shape is not too simple, we'll use z-order curve hash later; calculate polygon bbox
     if (data.length > 80 * dim) {
         minX = data[0];
         minY = data[1];
@@ -982,7 +1029,6 @@ function earcut(data, holeIndices, dim = 2) {
             if (y > maxY) maxY = y;
         }
 
-        // minX, minY and invSize are later used to transform coords into integers for z-order calculation
         invSize = Math.max(maxX - minX, maxY - minY);
         invSize = invSize !== 0 ? 32767 / invSize : 0;
     }
@@ -992,7 +1038,6 @@ function earcut(data, holeIndices, dim = 2) {
     return triangles;
 }
 
-// create a circular doubly linked list from polygon points in the specified winding order
 function linkedList(data, start, end, dim, clockwise) {
     let last;
 
@@ -1010,7 +1055,6 @@ function linkedList(data, start, end, dim, clockwise) {
     return last;
 }
 
-// eliminate colinear or duplicate points
 function filterPoints(start, end) {
     if (!start) return start;
     if (!end) end = start;
@@ -1034,26 +1078,22 @@ function filterPoints(start, end) {
     return end;
 }
 
-// main ear slicing loop which triangulates a polygon (given as a linked list)
 function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
     if (!ear) return;
 
-    // interlink polygon nodes in z-order
     if (!pass && invSize) indexCurve(ear, minX, minY, invSize);
 
     let stop = ear;
 
-    // iterate through ears, slicing them one by one
     while (ear.prev !== ear.next) {
         const prev = ear.prev;
         const next = ear.next;
 
         if (invSize ? isEarHashed(ear, minX, minY, invSize) : isEar(ear)) {
-            triangles.push(prev.i, ear.i, next.i); // cut off the triangle
+            triangles.push(prev.i, ear.i, next.i);
 
             removeNode(ear);
 
-            // skipping the next vertex leads to less sliver triangles
             ear = next.next;
             stop = next.next;
 
@@ -1062,18 +1102,14 @@ function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
 
         ear = next;
 
-        // if we looped through the whole remaining polygon and can't find any more ears
         if (ear === stop) {
-            // try filtering points and slicing again
             if (!pass) {
                 earcutLinked(filterPoints(ear), triangles, dim, minX, minY, invSize, 1);
 
-            // if this didn't work, try curing all small self-intersections locally
             } else if (pass === 1) {
                 ear = cureLocalIntersections(filterPoints(ear), triangles);
                 earcutLinked(ear, triangles, dim, minX, minY, invSize, 2);
 
-            // as a last resort, try splitting the remaining polygon into two
             } else if (pass === 2) {
                 splitEarcut(ear, triangles, dim, minX, minY, invSize);
             }
@@ -1083,18 +1119,15 @@ function earcutLinked(ear, triangles, dim, minX, minY, invSize, pass) {
     }
 }
 
-// check whether a polygon node forms a valid ear with adjacent nodes
 function isEar(ear) {
     const a = ear.prev,
         b = ear,
         c = ear.next;
 
-    if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
+    if (area(a, b, c) >= 0) return false;
 
-    // now make sure we don't have other points inside the potential ear
     const ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
 
-    // triangle bbox
     const x0 = Math.min(ax, bx, cx),
         y0 = Math.min(ay, by, cy),
         x1 = Math.max(ax, bx, cx),
@@ -1116,24 +1149,21 @@ function isEarHashed(ear, minX, minY, invSize) {
         b = ear,
         c = ear.next;
 
-    if (area(a, b, c) >= 0) return false; // reflex, can't be an ear
+    if (area(a, b, c) >= 0) return false;
 
     const ax = a.x, bx = b.x, cx = c.x, ay = a.y, by = b.y, cy = c.y;
 
-    // triangle bbox
     const x0 = Math.min(ax, bx, cx),
         y0 = Math.min(ay, by, cy),
         x1 = Math.max(ax, bx, cx),
         y1 = Math.max(ay, by, cy);
 
-    // z-order range for the current triangle bbox;
     const minZ = zOrder(x0, y0, minX, minY, invSize),
         maxZ = zOrder(x1, y1, minX, minY, invSize);
 
     let p = ear.prevZ,
         n = ear.nextZ;
 
-    // look for points inside the triangle in both directions
     while (p && p.z >= minZ && n && n.z <= maxZ) {
         if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c &&
             pointInTriangleExceptFirst(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
@@ -1144,14 +1174,12 @@ function isEarHashed(ear, minX, minY, invSize) {
         n = n.nextZ;
     }
 
-    // look for remaining points in decreasing z-order
     while (p && p.z >= minZ) {
         if (p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1 && p !== a && p !== c &&
             pointInTriangleExceptFirst(ax, ay, bx, by, cx, cy, p.x, p.y) && area(p.prev, p, p.next) >= 0) return false;
         p = p.prevZ;
     }
 
-    // look for remaining points in increasing z-order
     while (n && n.z <= maxZ) {
         if (n.x >= x0 && n.x <= x1 && n.y >= y0 && n.y <= y1 && n !== a && n !== c &&
             pointInTriangleExceptFirst(ax, ay, bx, by, cx, cy, n.x, n.y) && area(n.prev, n, n.next) >= 0) return false;
@@ -1161,7 +1189,6 @@ function isEarHashed(ear, minX, minY, invSize) {
     return true;
 }
 
-// go through all polygon nodes and cure small local self-intersections
 function cureLocalIntersections(start, triangles) {
     let p = start;
     do {
@@ -1172,7 +1199,6 @@ function cureLocalIntersections(start, triangles) {
 
             triangles.push(a.i, p.i, b.i);
 
-            // remove two nodes involved
             removeNode(p);
             removeNode(p.next);
 
@@ -1184,22 +1210,17 @@ function cureLocalIntersections(start, triangles) {
     return filterPoints(p);
 }
 
-// try splitting polygon into two and triangulate them independently
 function splitEarcut(start, triangles, dim, minX, minY, invSize) {
-    // look for a valid diagonal that divides the polygon into two
     let a = start;
     do {
         let b = a.next.next;
         while (b !== a.prev) {
             if (a.i !== b.i && isValidDiagonal(a, b)) {
-                // split the polygon in two by the diagonal
                 let c = splitPolygon(a, b);
 
-                // filter colinear points around the cuts
                 a = filterPoints(a, a.next);
                 c = filterPoints(c, c.next);
 
-                // run earcut on each half
                 earcutLinked(a, triangles, dim, minX, minY, invSize, 0);
                 earcutLinked(c, triangles, dim, minX, minY, invSize, 0);
                 return;
@@ -1210,7 +1231,6 @@ function splitEarcut(start, triangles, dim, minX, minY, invSize) {
     } while (a !== start);
 }
 
-// link every hole into the outer loop, producing a single-ring polygon without holes
 function eliminateHoles(data, holeIndices, outerNode, dim) {
     const queue = [];
 
@@ -1224,7 +1244,6 @@ function eliminateHoles(data, holeIndices, outerNode, dim) {
 
     queue.sort(compareXYSlope);
 
-    // process holes from left to right
     for (let i = 0; i < queue.length; i++) {
         outerNode = eliminateHole(queue[i], outerNode);
     }
@@ -1234,8 +1253,6 @@ function eliminateHoles(data, holeIndices, outerNode, dim) {
 
 function compareXYSlope(a, b) {
     let result = a.x - b.x;
-    // when the left-most point of 2 holes meet at a vertex, sort the holes counterclockwise so that when we find
-    // the bridge to the outer shell is always the point that they meet at.
     if (result === 0) {
         result = a.y - b.y;
         if (result === 0) {
@@ -1247,7 +1264,6 @@ function compareXYSlope(a, b) {
     return result;
 }
 
-// find a bridge between vertices that connects hole with an outer ring and link it
 function eliminateHole(hole, outerNode) {
     const bridge = findHoleBridge(hole, outerNode);
     if (!bridge) {
@@ -1256,12 +1272,10 @@ function eliminateHole(hole, outerNode) {
 
     const bridgeReverse = splitPolygon(bridge, hole);
 
-    // filter collinear points around the cuts
     filterPoints(bridgeReverse, bridgeReverse.next);
     return filterPoints(bridge, bridge.next);
 }
 
-// David Eberly's algorithm for finding a bridge between hole and outer polygon
 function findHoleBridge(hole, outerNode) {
     let p = outerNode;
     const hx = hole.x;
@@ -1269,9 +1283,6 @@ function findHoleBridge(hole, outerNode) {
     let qx = -Infinity;
     let m;
 
-    // find a segment intersected by a ray from the hole's leftmost point to the left;
-    // segment's endpoint with lesser x will be potential connection point
-    // unless they intersect at a vertex, then choose the vertex
     if (equals(hole, p)) return p;
     do {
         if (equals(hole, p.next)) return p.next;
@@ -1280,17 +1291,13 @@ function findHoleBridge(hole, outerNode) {
             if (x <= hx && x > qx) {
                 qx = x;
                 m = p.x < p.next.x ? p : p.next;
-                if (x === hx) return m; // hole touches outer segment; pick leftmost endpoint
+                if (x === hx) return m;
             }
         }
         p = p.next;
     } while (p !== outerNode);
 
     if (!m) return null;
-
-    // look for points inside the triangle of hole point, segment intersection and endpoint;
-    // if there are no points found, we have a valid connection;
-    // otherwise choose the point of the minimum angle with the ray as connection point
 
     const stop = m;
     const mx = m.x;
@@ -1303,7 +1310,7 @@ function findHoleBridge(hole, outerNode) {
         if (hx >= p.x && p.x >= mx && hx !== p.x &&
                 pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
 
-            const tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
+            const tan = Math.abs(hy - p.y) / (hx - p.x);
 
             if (locallyInside(p, hole) &&
                 (tan < tanMin || (tan === tanMin && (p.x > m.x || (p.x === m.x && sectorContainsSector(m, p)))))) {
@@ -1318,12 +1325,10 @@ function findHoleBridge(hole, outerNode) {
     return m;
 }
 
-// whether sector in vertex m contains sector in vertex p in the same coordinates
 function sectorContainsSector(m, p) {
     return area(m.prev, m, p.prev) < 0 && area(p.next, m, m.next) < 0;
 }
 
-// interlink polygon nodes in z-order
 function indexCurve(start, minX, minY, invSize) {
     let p = start;
     do {
@@ -1339,8 +1344,6 @@ function indexCurve(start, minX, minY, invSize) {
     sortLinked(p);
 }
 
-// Simon Tatham's linked list merge sort algorithm
-// http://www.chiark.greenend.org.uk/~sgtatham/algorithms/listsort.html
 function sortLinked(list) {
     let numMerges;
     let inSize = 1;
@@ -1393,9 +1396,7 @@ function sortLinked(list) {
     return list;
 }
 
-// z-order of a point given coords and inverse of the longer side of data bbox
 function zOrder(x, y, minX, minY, invSize) {
-    // coords are transformed into non-negative 15-bit integer range
     x = (x - minX) * invSize | 0;
     y = (y - minY) * invSize | 0;
 
@@ -1412,7 +1413,6 @@ function zOrder(x, y, minX, minY, invSize) {
     return x | (y << 1);
 }
 
-// find the leftmost node of a polygon ring
 function getLeftmost(start) {
     let p = start,
         leftmost = start;
@@ -1424,54 +1424,47 @@ function getLeftmost(start) {
     return leftmost;
 }
 
-// check if a point lies within a convex triangle
 function pointInTriangle(ax, ay, bx, by, cx, cy, px, py) {
     return (cx - px) * (ay - py) >= (ax - px) * (cy - py) &&
            (ax - px) * (by - py) >= (bx - px) * (ay - py) &&
            (bx - px) * (cy - py) >= (cx - px) * (by - py);
 }
 
-// check if a point lies within a convex triangle but false if its equal to the first point of the triangle
 function pointInTriangleExceptFirst(ax, ay, bx, by, cx, cy, px, py) {
     return !(ax === px && ay === py) && pointInTriangle(ax, ay, bx, by, cx, cy, px, py);
 }
 
-// check if a diagonal between two polygon nodes is valid (lies in polygon interior)
 function isValidDiagonal(a, b) {
-    return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) && // doesn't intersect other edges
-           (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) && // locally visible
-            (area(a.prev, a, b.prev) || area(a, b.prev, b)) || // does not create opposite-facing sectors
-            equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0); // special zero-length case
+    return a.next.i !== b.i && a.prev.i !== b.i && !intersectsPolygon(a, b) &&
+           (locallyInside(a, b) && locallyInside(b, a) && middleInside(a, b) &&
+            (area(a.prev, a, b.prev) || area(a, b.prev, b)) ||
+            equals(a, b) && area(a.prev, a, a.next) > 0 && area(b.prev, b, b.next) > 0);
 }
 
-// signed area of a triangle
 function area(p, q, r) {
     return (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
 }
 
-// check if two points are equal
 function equals(p1, p2) {
     return p1.x === p2.x && p1.y === p2.y;
 }
 
-// check if two segments intersect
 function intersects(p1, q1, p2, q2) {
     const o1 = sign(area(p1, q1, p2));
     const o2 = sign(area(p1, q1, q2));
     const o3 = sign(area(p2, q2, p1));
     const o4 = sign(area(p2, q2, q1));
 
-    if (o1 !== o2 && o3 !== o4) return true; // general case
+    if (o1 !== o2 && o3 !== o4) return true;
 
-    if (o1 === 0 && onSegment(p1, p2, q1)) return true; // p1, q1 and p2 are collinear and p2 lies on p1q1
-    if (o2 === 0 && onSegment(p1, q2, q1)) return true; // p1, q1 and q2 are collinear and q2 lies on p1q1
-    if (o3 === 0 && onSegment(p2, p1, q2)) return true; // p2, q2 and p1 are collinear and p1 lies on p2q2
-    if (o4 === 0 && onSegment(p2, q1, q2)) return true; // p2, q2 and q1 are collinear and q1 lies on p2q2
+    if (o1 === 0 && onSegment(p1, p2, q1)) return true;
+    if (o2 === 0 && onSegment(p1, q2, q1)) return true;
+    if (o3 === 0 && onSegment(p2, p1, q2)) return true;
+    if (o4 === 0 && onSegment(p2, q1, q2)) return true;
 
     return false;
 }
 
-// for collinear points p, q, r, check if point q lies on segment pr
 function onSegment(p, q, r) {
     return q.x <= Math.max(p.x, r.x) && q.x >= Math.min(p.x, r.x) && q.y <= Math.max(p.y, r.y) && q.y >= Math.min(p.y, r.y);
 }
@@ -1480,7 +1473,6 @@ function sign(num) {
     return num > 0 ? 1 : num < 0 ? -1 : 0;
 }
 
-// check if a polygon diagonal intersects any polygon segments
 function intersectsPolygon(a, b) {
     let p = a;
     do {
@@ -1492,14 +1484,12 @@ function intersectsPolygon(a, b) {
     return false;
 }
 
-// check if a polygon diagonal is locally inside the polygon
 function locallyInside(a, b) {
     return area(a.prev, a, a.next) < 0 ?
         area(a, b, a.next) >= 0 && area(a, a.prev, b) >= 0 :
         area(a, b, a.prev) < 0 || area(a, a.next, b) < 0;
 }
 
-// check if the middle point of a polygon diagonal is inside the polygon
 function middleInside(a, b) {
     let p = a;
     let inside = false;
@@ -1515,8 +1505,6 @@ function middleInside(a, b) {
     return inside;
 }
 
-// link two polygon vertices with a bridge; if the vertices belong to the same ring, it splits polygon into two;
-// if one belongs to the outer ring and another to a hole, it merges it into a single ring
 function splitPolygon(a, b) {
     const a2 = createNode(a.i, a.x, a.y),
         b2 = createNode(b.i, b.x, b.y),
@@ -1538,7 +1526,6 @@ function splitPolygon(a, b) {
     return b2;
 }
 
-// create a node and optionally link it with previous one (in a circular doubly linked list)
 function insertNode(i, x, y, last) {
     const p = createNode(i, x, y);
 
@@ -1565,19 +1552,14 @@ function removeNode(p) {
 
 function createNode(i, x, y) {
     return {
-        i, // vertex index in coordinates array
-        x, y, // vertex coordinates
-        prev: null, // previous and next vertex nodes in a polygon ring
-        next: null,
-        z: 0, // z-order curve value
-        prevZ: null, // previous and next nodes in z-order
-        nextZ: null,
-        steiner: false // indicates whether this is a steiner point
+        i, x, y,
+        prev: null, next: null,
+        z: 0,
+        prevZ: null, nextZ: null,
+        steiner: false
     };
 }
 
-// return a percentage difference between the polygon area and its triangulation area;
-// used to verify correctness of triangulation
 function earcutDeviation(data, holeIndices, dim, triangles) {
     const hasHoles = holeIndices && holeIndices.length;
     const outerLen = hasHoles ? holeIndices[0] * dim : data.length;
@@ -1614,7 +1596,6 @@ function earcutSignedArea(data, start, end, dim) {
     return sum;
 }
 
-// turn a polygon in a multi-dimensional array form (e.g. as in GeoJSON) into a form Earcut accepts
 function earcutFlatten(data) {
     const vertices = [];
     const holes = [];
@@ -1637,17 +1618,210 @@ function earcutFlatten(data) {
 
 // ══════════════════════════════════════════════════════
 //  VECTOR STL ENGINE  v4
-//  Pipeline:
-//    1. bitmap → binary mask
-//    2. boundary edge tracing → raw pixel contours
-//    3. Douglas-Peucker simplification
-//    4. Chaikin smoothing (3 passes) → smooth curves
-//    5. classify outer/hole by signed area
-//    6. earcut triangulation (handles holes correctly)
-//    7. extrude: side walls + top/bottom share exact vertices → watertight
 // ══════════════════════════════════════════════════════
 
-// ─── 1. Binary mask ───────────────────────────────────
+function getSVGMask(s, scale) {
+  return new Promise(resolve => {
+    const W0 = s.resolution || 600;
+    const SC = scale || 4;
+    const W = W0 * SC, H = W;
+    const blob = new Blob([_svgSrc], {type:'image/svg+xml'});
+    const url  = URL.createObjectURL(blob);
+    const img  = new Image();
+    img.onload = () => {
+      const off = document.createElement('canvas');
+      off.width = W; off.height = H;
+      const octx = off.getContext('2d');
+      octx.fillStyle = '#ffffff';
+      octx.fillRect(0,0,W,H);
+      const svgAR = img.naturalWidth / img.naturalHeight;
+      const pl = _svgPlacement || { scale:1, offXPct:0, offYPct:0, invert:false };
+      const fitW = Math.min(W * pl.scale, H * pl.scale * svgAR);
+      const fitH = fitW / svgAR;
+      const cx = W/2 + pl.offXPct * W;
+      const cy = H/2 + pl.offYPct * H;
+      if (s.mirrorX) { octx.save(); octx.translate(W,0); octx.scale(-1,1); }
+      if (pl.invert) {
+        octx.fillStyle = '#000000';
+        octx.fillRect(0,0,W,H);
+        octx.globalCompositeOperation = 'destination-out';
+        octx.drawImage(img, cx-fitW/2, cy-fitH/2, fitW, fitH);
+        octx.globalCompositeOperation = 'source-over';
+      } else {
+        octx.drawImage(img, cx-fitW/2, cy-fitH/2, fitW, fitH);
+      }
+      if (s.mirrorX) octx.restore();
+      URL.revokeObjectURL(url);
+      const d = octx.getImageData(0,0,W,H).data;
+      const raw = new Uint8Array(W*H);
+      for (let i=0;i<W*H;i++)
+        raw[i] = (d[i*4]*0.299+d[i*4+1]*0.587+d[i*4+2]*0.114) < 200 ? 1 : 0;
+      const R = SC;
+      const tmp = new Uint8Array(W*H);
+      for (let y=0;y<H;y++) for (let x=0;x<W;x++) {
+        if (raw[y*W+x]) { tmp[y*W+x]=1; continue; }
+        let hit=false;
+        for (let dy=-R;dy<=R&&!hit;dy++) for (let dx=-R;dx<=R&&!hit;dx++) {
+          const nx=x+dx,ny=y+dy;
+          if(nx>=0&&nx<W&&ny>=0&&ny<H&&raw[ny*W+nx]) hit=true;
+        }
+        tmp[y*W+x]=hit?1:0;
+      }
+      const mask = new Uint8Array(W*H);
+      for (let y=0;y<H;y++) for (let x=0;x<W;x++) {
+        if (!tmp[y*W+x]) { mask[y*W+x]=0; continue; }
+        let solid=true;
+        for (let dy=-R;dy<=R&&solid;dy++) for (let dx=-R;dx<=R&&solid;dx++) {
+          const nx=x+dx,ny=y+dy;
+          if(nx>=0&&nx<W&&ny>=0&&ny<H&&!tmp[ny*W+nx]) solid=false;
+        }
+        mask[y*W+x]=solid?1:0;
+      }
+      resolve({mask,W,H,scale:SC});
+    };
+    img.onerror = () => {
+      resolve({...getBinaryMask(s), scale:1});
+    };
+    img.src = url;
+  });
+}
+
+async function buildContours(s) {
+  let mask, W, H, scale = 1;
+
+  if (_svgActive && _svgSrc) {
+    // Merged mask: render bitmap canvas + SVG layer together at high res
+    ({mask, W, H, scale} = await getMergedMask(s, 4));
+  } else {
+    ({mask, W, H} = getBinaryMask(s));
+  }
+
+  const raw = extractContours(mask, W, H);
+  const eps = (s.simplifyEps || 0.8) * scale;
+  return raw
+    .map(c => {
+      const simp = dpSimplify(c, eps);
+      if (simp.length < 3) return null;
+      const sm = s.smoothMode === 'bezier'
+        ? bezierFitAndTessellate(simp, s.bezierTol ?? 1.5, s.bezierTess ?? 12)
+        : chaikin(simp, s.chaikinPasses ?? 3);
+      return scaleContour(sm, W, H, s.physW, s.physH);
+    })
+    .filter(Boolean);
+}
+
+// getMergedMask: composites the bitmap canvas + SVG layer into one high-res binary mask.
+// This is what all export functions (STL, GCODE, SVG export) use when SVG is active.
+function getMergedMask(s, SC) {
+  return new Promise(resolve => {
+    const W0 = s.resolution || 600;
+    const W = W0 * SC, H = W;
+    const blob = new Blob([_svgSrc], {type:'image/svg+xml'});
+    const url  = URL.createObjectURL(blob);
+    const img  = new Image();
+
+    img.onload = () => {
+      const off = document.createElement('canvas');
+      off.width = W; off.height = H;
+      const oc = off.getContext('2d');
+
+      // ── Layer 1: bitmap canvas (scaled up) ──
+      oc.fillStyle = '#ffffff';
+      oc.fillRect(0, 0, W, H);
+      if (s.mirrorX) { oc.save(); oc.translate(W, 0); oc.scale(-1, 1); }
+      oc.drawImage(canvas, 0, 0, W, H);
+      if (s.mirrorX) oc.restore();
+
+      // ── Layer 2: SVG on top ──
+      const pl = _svgPlacement || { scale:1, offXPct:0, offYPct:0, invert:false };
+      const svgAR = img.naturalWidth / img.naturalHeight;
+      const fitW = Math.min(W * pl.scale, H * pl.scale * svgAR);
+      const fitH = fitW / svgAR;
+      const cx = W/2 + pl.offXPct * W;
+      const cy = H/2 + pl.offYPct * H;
+
+      if (pl.invert) {
+        // Invert: where SVG is dark → erase (make white/transparent)
+        const svgOff = document.createElement('canvas');
+        svgOff.width = W; svgOff.height = H;
+        const sc2 = svgOff.getContext('2d');
+        sc2.fillStyle = '#000000';
+        sc2.fillRect(0, 0, W, H);
+        sc2.globalCompositeOperation = 'destination-out';
+        if (s.mirrorX) { sc2.save(); sc2.translate(W, 0); sc2.scale(-1, 1); }
+        sc2.drawImage(img, cx - fitW/2, cy - fitH/2, fitW, fitH);
+        if (s.mirrorX) sc2.restore();
+        sc2.globalCompositeOperation = 'source-over';
+        // Composite: where SVG inverted is black → paint black onto merged canvas
+        oc.drawImage(svgOff, 0, 0);
+      } else {
+        // Normal: render SVG to temp canvas, threshold to pure B&W, then multiply
+        // onto the bitmap so white SVG areas never cover the bitmap pixels.
+        const svgTmp = document.createElement('canvas');
+        svgTmp.width = W; svgTmp.height = H;
+        const st = svgTmp.getContext('2d');
+        st.fillStyle = '#ffffff';
+        st.fillRect(0, 0, W, H);
+        if (s.mirrorX) { st.save(); st.translate(W, 0); st.scale(-1, 1); }
+        st.drawImage(img, cx - fitW/2, cy - fitH/2, fitW, fitH);
+        if (s.mirrorX) st.restore();
+
+        // Threshold SVG to pure B&W so antialiased grey edges don't bleed
+        const sid = st.getImageData(0, 0, W, H);
+        const sd = sid.data;
+        for (let i = 0; i < sd.length; i += 4) {
+          const b = sd[i]*0.299 + sd[i+1]*0.587 + sd[i+2]*0.114;
+          const ink = b < 128;
+          sd[i] = sd[i+1] = sd[i+2] = ink ? 0 : 255;
+          sd[i+3] = 255;
+        }
+        st.putImageData(sid, 0, 0);
+
+        // Multiply: black*anything=black, white*anything=anything (bitmap shows through)
+        oc.globalCompositeOperation = 'multiply';
+        oc.drawImage(svgTmp, 0, 0);
+        oc.globalCompositeOperation = 'source-over';
+      }
+
+      URL.revokeObjectURL(url);
+
+      // ── Build binary mask from merged composite ──
+      const d = oc.getImageData(0, 0, W, H).data;
+      const raw = new Uint8Array(W * H);
+      for (let i = 0; i < W * H; i++)
+        raw[i] = (d[i*4]*0.299 + d[i*4+1]*0.587 + d[i*4+2]*0.114) < 200 ? 1 : 0;
+
+      // Morphological closing at scale radius to fill antialiasing gaps
+      const R = SC;
+      const tmp = new Uint8Array(W * H);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        if (raw[y*W+x]) { tmp[y*W+x] = 1; continue; }
+        let hit = false;
+        for (let dy = -R; dy <= R && !hit; dy++) for (let dx = -R; dx <= R && !hit; dx++) {
+          const nx = x+dx, ny = y+dy;
+          if (nx>=0 && nx<W && ny>=0 && ny<H && raw[ny*W+nx]) hit = true;
+        }
+        tmp[y*W+x] = hit ? 1 : 0;
+      }
+      const mask = new Uint8Array(W * H);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        if (!tmp[y*W+x]) { mask[y*W+x] = 0; continue; }
+        let solid = true;
+        for (let dy = -R; dy <= R && solid; dy++) for (let dx = -R; dx <= R && solid; dx++) {
+          const nx = x+dx, ny = y+dy;
+          if (nx>=0 && nx<W && ny>=0 && ny<H && !tmp[ny*W+nx]) solid = false;
+        }
+        mask[y*W+x] = solid ? 1 : 0;
+      }
+
+      resolve({ mask, W, H, scale: SC });
+    };
+
+    img.onerror = () => resolve({ ...getBinaryMask(s), scale: 1 });
+    img.src = url;
+  });
+}
+
 function getBinaryMask(s) {
   const W = canvas.width, H = canvas.height;
   const off = document.createElement('canvas');
@@ -1659,13 +1833,10 @@ function getBinaryMask(s) {
   octx.drawImage(canvas, 0, 0);
   const d = octx.getImageData(0, 0, W, H).data;
 
-  // Slightly lower threshold to catch antialiased stroke edges
   const raw = new Uint8Array(W * H);
   for (let i = 0; i < W * H; i++)
     raw[i] = (d[i*4]*0.299 + d[i*4+1]*0.587 + d[i*4+2]*0.114) < 220 ? 1 : 0;
 
-  // Morphological closing (dilate R px then erode R px)
-  // Fills 1-2px antialiasing gaps between overlapping strokes
   const R = 2;
   const tmp = new Uint8Array(W * H);
   for (let y = 0; y < H; y++) {
@@ -1697,7 +1868,6 @@ function getBinaryMask(s) {
   return { mask, W, H };
 }
 
-// ─── 2. Boundary edge tracing ─────────────────────────
 function extractContours(mask, W, H) {
   const get = (x, y) => (x>=0&&y>=0&&x<W&&y<H) ? mask[y*W+x] : 0;
   const edgeMap = new Map();
@@ -1736,7 +1906,6 @@ function extractContours(mask, W, H) {
   return polys;
 }
 
-// ─── 3. Douglas-Peucker (iterative, no stack overflow) ─
 function dpSimplify(pts, eps) {
   if (pts.length<=2) return pts;
   const keep=new Uint8Array(pts.length);
@@ -1758,7 +1927,6 @@ function dpSimplify(pts, eps) {
   return pts.filter((_,i)=>keep[i]);
 }
 
-// ─── 4. Chaikin smoothing ─────────────────────────────
 function chaikin(pts, passes) {
   let p = pts;
   for (let pass=0;pass<passes;pass++) {
@@ -1773,19 +1941,16 @@ function chaikin(pts, passes) {
   return p;
 }
 
-// ─── 5. Scale pixels → mm ─────────────────────────────
 function scaleContour(pts, W, H, physW, physH) {
   return pts.map(p=>({x:(p.x/W)*physW, y:(p.y/H)*physH}));
 }
 
-// ─── 6. Signed area (positive=CCW, negative=CW) ───────
 function signedArea(poly) {
   let a=0; const n=poly.length;
   for (let i=0;i<n;i++){const j=(i+1)%n;a+=poly[i].x*poly[j].y-poly[j].x*poly[i].y;}
   return a/2;
 }
 
-// ─── 7. Point-in-polygon (ray cast) ───────────────────
 function pointInPoly(px, py, poly) {
   let inside=false;
   const n=poly.length;
@@ -1796,41 +1961,20 @@ function pointInPoly(px, py, poly) {
   return inside;
 }
 
-// ─── 8. Build full watertight STL ─────────────────────
-function buildSTL(s) {
-  const {mask,W,H} = getBinaryMask(s);
-  const rawContours = extractContours(mask,W,H);
-  const eps = s.simplifyEps;
-  const smooth = s.chaikinPasses ?? 3;
-
-  // Simplify → smooth → scale
-  const contours = rawContours
-    .map(c => {
-      const simp = dpSimplify(c, eps);  // open ring — closing via [(i+1)%n]
-      if (simp.length<3) return null;
-      const sm = chaikin(simp, smooth);
-      return scaleContour(sm, W, H, s.physW, s.physH);
-    })
-    .filter(Boolean);
-
+async function buildSTL(s) {
+  const contours = await buildContours(s);
   if (contours.length===0) return [];
 
-  // Normalize winding: ensure outers are CCW, holes CW
-  // The boundary tracer may output all CW — detect by checking nesting
-  // Sort by absolute area descending (largest = outermost)
   const withArea = contours.map(c=>({c, a:signedArea(c), ab:Math.abs(signedArea(c))}));
   withArea.sort((x,y)=>y.ab-x.ab);
 
-  // Make largest contour CCW; a contour is a hole if it's inside any larger CCW contour
   const normalized = [];
   for (const item of withArea) {
-    // Check if this contour's centroid is inside any already-normalized CCW contour
     const ref = item.c[0];
     let isHole = false;
     for (const prev of normalized) {
       if (prev.isOuter && pointInPoly(ref.x, ref.y, prev.c)) { isHole=true; break; }
     }
-    // Ensure correct winding: outer=CCW(area>0), hole=CW(area<0)
     let poly = item.c;
     if (!isHole && item.a < 0) poly = [...poly].reverse();
     if ( isHole && item.a > 0) poly = [...poly].reverse();
@@ -1856,7 +2000,6 @@ function buildSTL(s) {
   const midZ = s.includeBase ? s.baseThick : 0;
   const topZ = midZ + s.designLayers * s.layerH;
 
-  // ── Base plate ────────────────────────────────────────
   if (s.includeBase) {
     const bw=s.physW, bh=s.physH;
     push(0,0,-1, 0,0,baseZ,  bw,0,baseZ,  bw,bh,baseZ);
@@ -1873,34 +2016,28 @@ function buildSTL(s) {
     push( 1,0,0, bw,0,baseZ, bw,bh,midZ,  bw,0,midZ);
   }
 
-  // ── Per group: extrude as watertight solid ────────────
   for (const {outer, holes: groupHoles} of groups) {
-    // earcut expects flat [x,y,x,y,...] + holeIndices array
     const verts=[];
     const holeIdx=[];
     for (const p of outer){ verts.push(p.x,p.y); }
     for (const h of groupHoles){
       holeIdx.push(verts.length/2);
-      // holes must be CW for earcut
       const hw = signedArea(h);
       const hpts = hw>0 ? [...h].reverse() : h;
       for (const p of hpts) verts.push(p.x,p.y);
     }
 
-    // earcut → flat index triplets
     const idx = earcut(verts, holeIdx.length?holeIdx:null, 2);
 
-    // Top face (CCW from above = +Z normal)
     for (let i=0;i<idx.length;i+=3) {
       const ai=idx[i]*2,  bi=idx[i+1]*2, ci=idx[i+2]*2;
       const ax=verts[ai], ay=verts[ai+1];
       const bx=verts[bi], by=verts[bi+1];
       const cx2=verts[ci], cy2=verts[ci+1];
       push(0,0, 1, ax,ay,topZ, bx,by,topZ, cx2,cy2,topZ);
-      push(0,0,-1, ax,ay,midZ, cx2,cy2,midZ, bx,by,midZ); // bottom reversed
+      push(0,0,-1, ax,ay,midZ, cx2,cy2,midZ, bx,by,midZ);
     }
 
-    // Side walls — all contours (outer + holes)
     const allRings = [outer, ...groupHoles];
     for (const ring of allRings) {
       const n=ring.length;
@@ -1918,9 +2055,6 @@ function buildSTL(s) {
   return tris;
 }
 
-// ══════════════════════════════════════════════════════
-//  EXPORT: STL binary
-// ══════════════════════════════════════════════════════
 function writeBinarySTL(tris) {
   const buf = new ArrayBuffer(84 + tris.length * 50);
   const dv  = new DataView(buf);
@@ -1936,15 +2070,15 @@ function writeBinarySTL(tris) {
   return buf;
 }
 
-function exportSTL() {
+async function exportSTL() {
   const s = getSettings();
-  const btns = document.querySelectorAll('.export-btn');
-  btns.forEach(b => b.disabled = true);
-  btns[btns.length - 1].textContent = '⏳ BUILDING...';
+  const stlBtn = document.getElementById('stlBtn');
+  stlBtn.disabled = true;
+  stlBtn.textContent = '⧗';
 
-  setTimeout(() => {
+  setTimeout(async () => {
     try {
-      const tris = buildSTL(s);
+      const tris = await buildSTL(s);
       if (tris.length === 0) {
         showToast('⚠ No geometry — draw something and try again');
       } else {
@@ -1962,51 +2096,51 @@ function exportSTL() {
       showToast('ERROR: ' + err.message);
       console.error('StampForge error:', err);
     }
-    btns.forEach(b => b.disabled = false);
-    btns[btns.length - 1].textContent = '▼ EXPORT STL';
+    stlBtn.disabled = false;
+    stlBtn.textContent = 'STL';
   }, 60);
 }
 
-// ══════════════════════════════════════════════════════
-//  EXPORT: SVG
-// ══════════════════════════════════════════════════════
 function exportSVG() {
-  const s = getSettings();
-  const { mask, W, H } = getBinaryMask(s);
-  const rawContours = extractContours(mask, W, H);
-  const contours = rawContours
-    .map(c => {
-      const simp = dpSimplify(c, s.simplifyEps);
-      if (simp.length < 3) return null;
-      const sm = chaikin(simp, s.chaikinPasses ?? 3);
-      return scaleContour(sm, W, H, s.physW, s.physH);
-    })
-    .filter(Boolean);
+  const svgBtn = document.querySelector('.export-btn[onclick="exportSVG()"]');
+  if (svgBtn) { svgBtn.disabled = true; svgBtn.textContent = '⧗'; }
 
-  if (!contours.length) { showToast('⚠ No geometry to export'); return; }
-
-  const pathData = contours.map(poly =>
-    'M ' + poly.map(p => `${p.x.toFixed(3)},${p.y.toFixed(3)}`).join(' L ') + ' Z'
-  ).join(' ');
-
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+  setTimeout(async () => {
+    try {
+      const s = getSettings();
+      // SVG export = design face (what you drew), not the stamp-back mirror
+      const sNoMirror = { ...s, mirrorX: false };
+      const contours = await buildContours(sNoMirror);
+      if (!contours.length) {
+        showToast('⚠ No geometry to export');
+      } else {
+        const physH = s.physH;
+        const pathData = contours.map(poly =>
+          'M ' + poly.map(p => `${p.x.toFixed(3)},${(physH - p.y).toFixed(3)}`).join(' L ') + ' Z'
+        ).join(' ');
+        const svgOut = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${s.physW}mm" height="${s.physH}mm" viewBox="0 0 ${s.physW} ${s.physH}">
   <path d="${pathData}" fill="black" fill-rule="evenodd" stroke="none"/>
 </svg>`;
-
-  const blob = new Blob([svg], { type: 'image/svg+xml' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
-  a.download = `${getProjectSlug()}_${s.physW}x${s.physH}mm.svg`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast(`✓ SVG exported — ${contours.length} paths`);
+        const blob = new Blob([svgOut], { type: 'image/svg+xml' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url;
+        a.download = `${getProjectSlug()}_${s.physW}x${s.physH}mm.svg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(`✓ SVG exported — ${contours.length} paths`);
+      }
+    } catch(err) {
+      showToast('ERROR: ' + err.message);
+      console.error(err);
+    }
+    if (svgBtn) { svgBtn.disabled = false; svgBtn.textContent = 'SVG'; }
+  }, 50);
 }
 
-// ══════════════════════════════════════════════════════
-//  PRINTER PROFILES + G-CODE ENGINE
-// ══════════════════════════════════════════════════════
 // ══════════════════════════════════════════════════════
 //  PRINTER PROFILES
 // ══════════════════════════════════════════════════════
@@ -2041,11 +2175,7 @@ M84 ; motors off`
     bed_x:250,bed_y:210,firmware:'marlin',filament:1.75,
     temp_nozzle:220,temp_bed:60,speed_print:50,speed_travel:200,speed_first:20,
     retract_len:0.6,retract_speed:40,fan_speed:255,fan_layer:2,
-    start_gcode:`G28 ; home
-M190 S{bed_temp}
-M109 S{nozzle_temp}
-G1 Z5 F3000
-G92 E0`,
+    start_gcode:`G28 ; home\nM190 S{bed_temp}\nM109 S{nozzle_temp}\nG1 Z5 F3000\nG92 E0`,
     end_gcode:`M104 S0\nM140 S0\nG28 X Y\nM84`
   },
   {
@@ -2053,16 +2183,7 @@ G92 E0`,
     bed_x:235,bed_y:235,firmware:'marlin',filament:1.75,
     temp_nozzle:200,temp_bed:60,speed_print:50,speed_travel:150,speed_first:25,
     retract_len:5.0,retract_speed:45,fan_speed:255,fan_layer:2,
-    start_gcode:`G28
-M190 S{bed_temp}
-M109 S{nozzle_temp}
-G92 E0
-G1 Z2 F3000
-G1 X0.1 Y20 Z0.3 F5000
-G1 X0.1 Y200 Z0.3 E15 F1500
-G1 X0.4 Y200 Z0.3 F5000
-G1 X0.4 Y20 Z0.3 E30 F1500
-G92 E0`,
+    start_gcode:`G28\nM190 S{bed_temp}\nM109 S{nozzle_temp}\nG92 E0\nG1 Z2 F3000\nG1 X0.1 Y20 Z0.3 F5000\nG1 X0.1 Y200 Z0.3 E15 F1500\nG1 X0.4 Y200 Z0.3 F5000\nG1 X0.4 Y20 Z0.3 E30 F1500\nG92 E0`,
     end_gcode:`M104 S0\nM140 S0\nG28 X\nM84`
   },
   {
@@ -2194,21 +2315,10 @@ function getPrinterProfile(id) {
 // ══════════════════════════════════════════════════════
 //  G-CODE ENGINE
 // ══════════════════════════════════════════════════════
-function generateGcode(s, printer) {
-  const {mask, W, H} = getBinaryMask(s);
-  const rawContours = extractContours(mask, W, H);
-  const contours = rawContours
-    .map(c => {
-      const simp = dpSimplify(c, s.simplifyEps);
-      if (simp.length < 3) return null;
-      const sm = chaikin(simp, s.chaikinPasses ?? 3);
-      return scaleContour(sm, W, H, s.physW, s.physH);
-    })
-    .filter(Boolean);
-
+async function generateGcode(s, printer) {
+  const contours = await buildContours(s);
   if (!contours.length) return null;
 
-  // Classify outers/holes (same as buildSTL)
   const withArea = contours.map(c=>({c,a:signedArea(c),ab:Math.abs(signedArea(c))}));
   withArea.sort((x,y)=>y.ab-x.ab);
   const normalized=[];
@@ -2223,19 +2333,17 @@ function generateGcode(s, printer) {
   }
   const outers = normalized.filter(x=>x.isOuter).map(x=>x.c);
 
-  // Printer/slicer params
   const layerH   = s.layerH;
   const nozzle   = s.nozzle;
   const filDia   = printer.filament;
   const filArea  = Math.PI * (filDia/2) ** 2;
-  const extW     = nozzle * 1.1;           // extrusion width = nozzle × 1.1
-  const speedPrint  = (s.gcSpeedPrint  || printer.speed_print)  * 60; // mm/min
+  const extW     = nozzle * 1.1;
+  const speedPrint  = (s.gcSpeedPrint  || printer.speed_print)  * 60;
   const speedTravel = (s.gcSpeedTravel || printer.speed_travel) * 60;
   const speedFirst  = (s.gcSpeedFirst  || printer.speed_first)  * 60;
   const retLen   = s.gcRetract   ?? printer.retract_len;
   const retSpeed = printer.retract_speed * 60;
 
-  // Offset stamp to bed centre
   const offX = (printer.bed_x - s.physW) / 2;
   const offY = (printer.bed_y - s.physH) / 2;
 
@@ -2245,7 +2353,7 @@ function generateGcode(s, printer) {
   const totalLayers = Math.round(topZ / layerH);
   const baseLayers  = Math.round(midZ / layerH);
 
-  let E = 0; // cumulative extrusion
+  let E = 0;
   let curX = 0, curY = 0, curZ = -1;
   let isRetracted = false;
   const lines = [];
@@ -2256,7 +2364,6 @@ function generateGcode(s, printer) {
   const mm   = v => v.toFixed(4);
   const emm  = v => v.toFixed(5);
 
-  // Extrusion amount for a move of given length
   const extrudeAmt = (len) => (len * layerH * extW) / filArea;
 
   function moveTo(x, y, speed, comment='') {
@@ -2297,19 +2404,16 @@ function generateGcode(s, printer) {
     emit(`G1 Z${mm(z)} F3000 ; layer z=${mm(z)}`);
   }
 
-  // Print a closed polygon ring on current Z
   function printRing(ring, layer) {
     const start = ring[0];
     travelTo(start.x, start.y);
-    setLayer(curZ); // already set before call
+    setLayer(curZ);
     for (let i=1; i<ring.length; i++) lineTo(ring[i].x, ring[i].y, speedPrint, layer);
-    lineTo(start.x, start.y, speedPrint, layer); // close ring
+    lineTo(start.x, start.y, speedPrint, layer);
   }
 
-  // Rectilinear infill for outer contours at current Z
   function printInfill(outerRings, layer, angle=0) {
     const pitch = extW * 1.05;
-    // Bounding box of all rings
     let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
     for (const r of outerRings)
       for (const p of r){
@@ -2317,7 +2421,6 @@ function generateGcode(s, printer) {
         if(p.y<minY)minY=p.y; if(p.y>maxY)maxY=p.y;
       }
 
-    // Scanline fill — same ray-casting as buildSTL
     let dir=1;
     const sp = layer===1 ? speedFirst : speedPrint;
     for (let y=minY+pitch/2; y<maxY; y+=pitch) {
@@ -2344,9 +2447,6 @@ function generateGcode(s, printer) {
     }
   }
 
-  // ── Build G-code ─────────────────────────────────────
-
-  // Apply start G-code (substitute placeholders)
   const startGcode = (printer.start_gcode||'')
     .replace(/\{nozzle_temp\}/g, s.gcTempNozzle || printer.temp_nozzle)
     .replace(/\{bed_temp\}/g,    s.gcTempBed    || printer.temp_bed)
@@ -2368,38 +2468,38 @@ function generateGcode(s, printer) {
 
     emit(`; ── Layer ${layer}/${totalLayers} z=${mm(z)} ${isBase?'[base]':'[design]'}`);
 
-    // Fan control
     if (layer === printer.fan_layer)
       emit(`M106 S${printer.fan_speed} ; fan on`);
 
     setLayer(z);
 
     if (isBase && s.includeBase) {
-      // Base plate: solid infill only (rectangle)
       emit('; base infill');
       const baseRect = [
         {x:0,y:0},{x:s.physW,y:0},
         {x:s.physW,y:s.physH},{x:0,y:s.physH}
       ];
-      // Perimeter
       printRing(baseRect, layer);
-      // Infill
       printInfill([baseRect], layer, layer%2===0?0:90);
     }
 
     if (isDesign) {
-      // Perimeters for each outer contour
+      const numPerim = s.numPerimeters || 2;
       emit('; perimeters');
-      for (const ring of outers) printRing(ring, layer);
-      // Infill
+      for (const ring of outers) {
+        for (let pi=0; pi<numPerim; pi++) {
+          const pRing = pi===0 ? ring : offsetRingBy(ring, pi*extW);
+          if (pRing.length >= 3) printRing(pRing, layer);
+        }
+      }
       emit('; infill');
-      printInfill(outers, layer, layer%2===0?0:90);
+      const innerRings = outers.map(r => numPerim>1 ? offsetRingBy(r,(numPerim-1)*extW) : r);
+      printInfill(innerRings, layer, layer%2===0?0:90);
     }
 
     emit('');
   }
 
-  // End G-code
   const endGcode = (printer.end_gcode||'')
     .replace(/\{z_max\}/g, mm(topZ + 20));
   emit(endGcode);
@@ -2417,24 +2517,22 @@ function onPrinterChange() {
   document.getElementById('gcSpeedFirst').value  = p.speed_first;
   document.getElementById('gcRetract').value     = p.retract_len;
   document.getElementById('gcFilDia').value      = p.filament;
-  // Also sync nozzle size to print settings panel
   document.getElementById('nozzleD').value       = p.nozzle;
 }
 
-function exportGcode() {
-  const s = getPrinterProfile ? getSettings() : getSettings();
+async function exportGcode() {
+  const s = getSettings();
   const printerId = document.getElementById('printerSelect').value;
   const printer = getPrinterProfile(printerId);
-  // Override filament diameter from UI
   printer.filament = parseFloat(document.getElementById('gcFilDia').value) || 1.75;
 
   const btn = document.getElementById('gcodeBtn');
   btn.disabled = true;
   btn.textContent = '⏳ SLICING...';
 
-  setTimeout(() => {
+  setTimeout(async () => {
     try {
-      const gcode = generateGcode(s, printer);
+      const gcode = await generateGcode(s, printer);
       if (!gcode) {
         showToast('⚠ No geometry — draw something first');
       } else {
@@ -2453,13 +2551,13 @@ function exportGcode() {
       console.error(err);
     }
     btn.disabled = false;
-    btn.textContent = '▼ GCODE';
+    btn.textContent = 'GCODE';
   }, 50);
 }
 
 
 // ══════════════════════════════════════════════════════
-//  USB SERIAL PRINT ENGINE  (Web Serial API — Chrome/Edge)
+//  USB SERIAL PRINT ENGINE
 // ══════════════════════════════════════════════════════
 let _port      = null;
 let _writer    = null;
@@ -2471,7 +2569,6 @@ let _lineIdx   = 0;
 let _printStart = 0;
 
 function openPrintModal() {
-  // Clear log each time modal opens
   document.getElementById('printLog').innerHTML = '';
   document.getElementById('printProgressBar').style.width = '0%';
   document.getElementById('pLine').textContent  = '0';
@@ -2494,7 +2591,6 @@ function openPrintModal() {
 
 async function closePrintModal() {
   document.getElementById('printModal').classList.remove('open');
-  // If not printing, close port so it's free for other apps
   if (!_printing && _port) {
     try {
       if (_reader) { await _reader.cancel(); _reader = null; }
@@ -2504,7 +2600,7 @@ async function closePrintModal() {
       document.getElementById('printConnectBtn').disabled = false;
       document.getElementById('printStartBtn').disabled = true;
       pStat('disconnected');
-    } catch(e) { /* ignore */ }
+    } catch(e) { }
   }
 }
 
@@ -2540,7 +2636,6 @@ async function usbConnect() {
     pLog('⚠ Web Serial not available — use Chrome or Edge via localhost.', 'err');
     return;
   }
-  // Close existing port if any
   if (_port) {
     try {
       if (_reader) { await _reader.cancel(); _reader = null; }
@@ -2557,7 +2652,6 @@ async function usbConnect() {
     await _port.open({ baudRate: 115200, dataBits: 8, stopBits: 1, parity: 'none' });
     pLog('✓ Port open — waiting for printer greeting…', 'ok');
     pStat('connected');
-    // Try to get port info for display
     try {
       const info = _port.getInfo();
       pPort(`VID:${info.usbVendorId?.toString(16).padStart(4,'0')} PID:${info.usbProductId?.toString(16).padStart(4,'0')}`);
@@ -2565,8 +2659,7 @@ async function usbConnect() {
     btn.textContent = '✓ CONNECTED';
     document.getElementById('printStartBtn').disabled = false;
     _readLoop();
-    // Send M115 to get firmware info
-    await new Promise(r => setTimeout(r, 1500)); // let printer boot
+    await new Promise(r => setTimeout(r, 1500));
     await _sendLine('M115');
   } catch(e) {
     _port = null;
@@ -2583,7 +2676,6 @@ async function usbConnect() {
   }
 }
 
-// Accumulate incoming serial data into lines
 let _rxBuf = '';
 let _okResolve = null;
 
@@ -2630,19 +2722,17 @@ async function _sendLine(line) {
 async function usbStartPrint() {
   if (!_port) { pLog('Not connected.', 'err'); return; }
 
-  // Generate G-code on the fly
   const s = getSettings();
   const printerId = document.getElementById('printerSelect').value;
   const printer = getPrinterProfile(printerId);
   printer.filament = parseFloat(document.getElementById('gcFilDia').value) || 1.75;
 
   pLog('Generating G-code…', 'inf');
-  const gcode = generateGcode(s, printer);
+  const gcode = await generateGcode(s, printer);
   if (!gcode) { pLog('No geometry — draw something first.', 'err'); return; }
 
-  // Filter: skip blank lines and pure comments for transmission efficiency
   _gcodeLines = gcode.split('\n')
-    .map(l => l.split(';')[0].trim())  // strip inline comments
+    .map(l => l.split(';')[0].trim())
     .filter(l => l.length > 0);
 
   _printing   = true;
@@ -2668,7 +2758,6 @@ async function usbStartPrint() {
     if (_cancelled) {
       pLog('Print cancelled by user.', 'err');
       pStat('cancelled');
-      // Emergency stop
       await _sendLine('M112');
     } else {
       pLog('✓ Print complete!', 'ok');
@@ -2692,6 +2781,613 @@ function usbCancel() {
   }
 }
 
+
+// ══════════════════════════════════════════════════════
+//  SVG IMPORT
+// ══════════════════════════════════════════════════════
+let _svgDoc = null;
+let _svgImg = null;
+let _svgSrc = null;
+let _svgActive = false;
+let _svgMode = 'vector'; // 'vector' | 'bitmap'
+
+function openSvgImport() {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.svg,image/svg+xml';
+  inp.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const text = ev.target.result;
+      _svgSrc = text;
+      const parser = new DOMParser();
+      _svgDoc = parser.parseFromString(text, 'image/svg+xml');
+      document.getElementById('svgScale').value = '100';
+      document.getElementById('svgOffX').value  = '0';
+      document.getElementById('svgOffY').value  = '0';
+      document.getElementById('svgInvert').checked = false;
+      document.getElementById('svgThresh').value = '128';
+      // Reset to vector mode
+      setSvgMode('vector');
+      const blob = new Blob([text], {type:'image/svg+xml'});
+      const url  = URL.createObjectURL(blob);
+      _svgImg = new Image();
+      _svgImg.onload = () => {
+        svgUpdatePreview();
+        URL.revokeObjectURL(url);
+      };
+      _svgImg.src = url;
+      document.getElementById('svgModal').classList.add('open');
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
+}
+
+// ── Toggle between vector / bitmap mode ───────────────
+function setSvgMode(mode) {
+  _svgMode = mode;
+  const btnVec = document.getElementById('svgModeVec');
+  const btnBmp = document.getElementById('svgModeBmp');
+  const threshRow = document.getElementById('svgThreshRow');
+  const desc = document.getElementById('svgModeDesc');
+  if (mode === 'vector') {
+    btnVec.style.background = 'var(--acc)'; btnVec.style.color = '#000';
+    btnBmp.style.background = 'var(--s3)';  btnBmp.style.color = 'var(--dim)';
+    threshRow.style.display = 'none';
+    desc.textContent = 'SVG vector: qualidade máxima na exportação STL/GCODE. Não editável com ferramentas de desenho.';
+    document.getElementById('svgConfirmBtn').textContent = '⬆ IMPORTAR SVG';
+  } else {
+    btnBmp.style.background = '#4a9eff'; btnBmp.style.color = '#000';
+    btnVec.style.background = 'var(--s3)'; btnVec.style.color = 'var(--dim)';
+    threshRow.style.display = 'flex';
+    desc.textContent = 'Converter para Bitmap: rasteriza o SVG na canvas. Podes editar, apagar e desenhar por cima.';
+    document.getElementById('svgConfirmBtn').textContent = '🖼 CONVERTER BITMAP';
+  }
+  svgUpdatePreview();
+}
+
+function svgUpdatePreview() {
+  if (!_svgImg) return;
+  const scale   = +document.getElementById('svgScale').value / 100;
+  const offXPct = +document.getElementById('svgOffX').value  / 100;
+  const offYPct = +document.getElementById('svgOffY').value  / 100;
+  const invert  = document.getElementById('svgInvert').checked;
+  const thresh  = +document.getElementById('svgThresh').value;
+  document.getElementById('svgScaleVal').textContent  = document.getElementById('svgScale').value + '%';
+  document.getElementById('svgOffXVal').textContent   = document.getElementById('svgOffX').value + '%';
+  document.getElementById('svgOffYVal').textContent   = document.getElementById('svgOffY').value + '%';
+  document.getElementById('svgThreshVal').textContent = thresh;
+
+  const wrap = document.getElementById('svgPreviewWrap');
+  wrap.innerHTML = '';
+  const pc = document.createElement('canvas');
+  pc.width  = wrap.clientWidth  || 452;
+  pc.height = wrap.clientHeight || 220;
+  wrap.appendChild(pc);
+  const pctx = pc.getContext('2d');
+
+  // Draw SVG onto preview
+  const aspect = _svgImg.naturalWidth / _svgImg.naturalHeight;
+  const fitW = Math.min(pc.width * scale, pc.height * scale * aspect);
+  const fitH = fitW / aspect;
+  const cx = pc.width/2  + offXPct * pc.width;
+  const cy = pc.height/2 + offYPct * pc.height;
+
+  if (invert) {
+    pctx.fillStyle = '#000';
+    pctx.fillRect(0,0,pc.width,pc.height);
+    pctx.globalCompositeOperation = 'destination-out';
+    pctx.drawImage(_svgImg, cx - fitW/2, cy - fitH/2, fitW, fitH);
+    pctx.globalCompositeOperation = 'source-over';
+  } else {
+    pctx.fillStyle = '#f5f5f0';
+    pctx.fillRect(0,0,pc.width,pc.height);
+    pctx.drawImage(_svgImg, cx - fitW/2, cy - fitH/2, fitW, fitH);
+  }
+
+  // In bitmap mode: show B&W threshold preview
+  if (_svgMode === 'bitmap') {
+    const id = pctx.getImageData(0,0,pc.width,pc.height);
+    const d = id.data;
+    for (let i=0;i<d.length;i+=4) {
+      const bright = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
+      const isInk = invert ? bright > (255 - thresh) : bright < thresh;
+      d[i] = d[i+1] = d[i+2] = isInk ? 0 : 245;
+      d[i+3] = 255;
+    }
+    pctx.putImageData(id,0,0);
+    // Blue border hint
+    pctx.strokeStyle = '#4a9eff'; pctx.lineWidth = 2;
+    pctx.strokeRect(1,1,pc.width-2,pc.height-2);
+  } else {
+    // Orange border hint for vector
+    pctx.strokeStyle = 'rgba(240,112,32,0.5)'; pctx.lineWidth = 2;
+    pctx.strokeRect(1,1,pc.width-2,pc.height-2);
+  }
+}
+
+let _svgPlacement = null;
+
+function svgConfirm() {
+  if (!_svgImg) return;
+
+  const scale   = +document.getElementById('svgScale').value / 100;
+  const offXPct = +document.getElementById('svgOffX').value  / 100;
+  const offYPct = +document.getElementById('svgOffY').value  / 100;
+  const invert  = document.getElementById('svgInvert').checked;
+  const thresh  = +document.getElementById('svgThresh').value;
+
+  document.getElementById('svgModal').classList.remove('open');
+
+  if (_svgMode === 'bitmap') {
+    // ── BITMAP MODE: rasterise SVG directly onto drawCanvas ──
+    pushUndo();
+    const W = canvas.width, H = canvas.height;
+
+    // Render SVG at full canvas resolution
+    const off = document.createElement('canvas');
+    off.width = W; off.height = H;
+    const octx2 = off.getContext('2d');
+
+    const aspect = _svgImg.naturalWidth / _svgImg.naturalHeight;
+    const fitW = Math.min(W * scale, H * scale * aspect);
+    const fitH = fitW / aspect;
+    const cx = W/2 + offXPct * W;
+    const cy = H/2 + offYPct * H;
+
+    if (invert) {
+      octx2.fillStyle = '#000000';
+      octx2.fillRect(0,0,W,H);
+      octx2.globalCompositeOperation = 'destination-out';
+      octx2.drawImage(_svgImg, cx-fitW/2, cy-fitH/2, fitW, fitH);
+      octx2.globalCompositeOperation = 'source-over';
+    } else {
+      octx2.fillStyle = '#f5f5f0';
+      octx2.fillRect(0,0,W,H);
+      octx2.drawImage(_svgImg, cx-fitW/2, cy-fitH/2, fitW, fitH);
+    }
+
+    // Threshold to pure B&W and paint onto drawCanvas
+    const id = octx2.getImageData(0,0,W,H);
+    const d = id.data;
+    for (let i=0;i<d.length;i+=4) {
+      const bright = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
+      const isInk = invert ? bright > (255 - thresh) : bright < thresh;
+      d[i] = d[i+1] = d[i+2] = isInk ? 0 : 245;
+      d[i+3] = 255;
+    }
+    octx2.putImageData(id,0,0);
+
+    // Composite onto existing canvas content (bitmap only, no clear)
+    ctx.drawImage(off, 0, 0);
+
+    // Clear all SVG state — it's now pixels
+    _svgActive = false; _svgSrc = null; _svgPlacement = null; _svgImg = null;
+    document.getElementById('svgBadge').classList.remove('active');
+    refreshUI();
+    showToast('✓ SVG convertido para bitmap — podes editar livremente');
+
+  } else {
+    // ── VECTOR MODE: keep SVG source, show as overlay ──
+    _svgPlacement = { scale, offXPct, offYPct, invert };
+    _svgActive = true;
+    drawSvgOverlay();
+    document.getElementById('svgBadge').classList.add('active');
+    showToast('✓ SVG vector activo — exportação usa fonte de alta resolução');
+  }
+}
+
+function drawSvgOverlay() {
+  if (!_svgImg || !_svgPlacement) return;
+  const { scale, offXPct, offYPct, invert } = _svgPlacement;
+  const W = svgc.width, H = svgc.height;
+
+  svgctx.clearRect(0, 0, W, H);
+
+  const aspect = _svgImg.naturalWidth / _svgImg.naturalHeight;
+  const fitW = Math.min(W * scale, H * scale * aspect);
+  const fitH = fitW / aspect;
+  const cx = W/2 + offXPct * W;
+  const cy = H/2 + offYPct * H;
+
+  // Render SVG onto temp canvas
+  const tmp = document.createElement('canvas');
+  tmp.width = W; tmp.height = H;
+  const tctx = tmp.getContext('2d');
+
+  if (invert) {
+    tctx.fillStyle = '#000000';
+    tctx.fillRect(0, 0, W, H);
+    tctx.globalCompositeOperation = 'destination-out';
+    tctx.drawImage(_svgImg, cx - fitW/2, cy - fitH/2, fitW, fitH);
+    tctx.globalCompositeOperation = 'source-over';
+  } else {
+    tctx.fillStyle = '#ffffff';
+    tctx.fillRect(0, 0, W, H);
+    tctx.drawImage(_svgImg, cx - fitW/2, cy - fitH/2, fitW, fitH);
+  }
+
+  // Threshold: dark pixels → opaque black, light pixels → transparent
+  // so the bitmap canvas beneath is visible through the white areas
+  const id = tctx.getImageData(0, 0, W, H);
+  const d = id.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const bright = d[i]*0.299 + d[i+1]*0.587 + d[i+2]*0.114;
+    if (bright < 200) {
+      d[i] = 0; d[i+1] = 0; d[i+2] = 0; d[i+3] = 255;
+    } else {
+      d[i+3] = 0;
+    }
+  }
+  tctx.putImageData(id, 0, 0);
+
+  // Paint onto dedicated SVG canvas (never touched by drawSymmetryGuides)
+  svgctx.drawImage(tmp, 0, 0);
+}
+
+function clearSvgSource() {
+  _svgActive = false;
+  _svgSrc = null;
+  _svgPlacement = null;
+  _svgImg = null;
+  document.getElementById('svgBadge').classList.remove('active');
+  svgctx.clearRect(0, 0, svgc.width, svgc.height);
+  showToast('SVG vector removido');
+}
+
+
+// ══════════════════════════════════════════════════════
+//  SAVE / LOAD PROJECT
+// ══════════════════════════════════════════════════════
+function saveProject() {
+  const s = getSettings();
+  const name = document.getElementById('projectTitle').textContent.trim() || 'untitled';
+  const project = {
+    version: 2,
+    name,
+    settings: s,
+    printer: document.getElementById('printerSelect').value,
+    canvas: canvas.toDataURL('image/png'),
+    saved: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(project, null, 2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = `${getProjectSlug()}.stampforge`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast(`✓ Project saved — ${name}.stampforge`);
+}
+
+function loadProject() {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.stampforge,application/json';
+  inp.onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const p = JSON.parse(ev.target.result);
+        if (!p.canvas) throw new Error('Invalid project file');
+        document.getElementById('projectTitle').textContent = p.name || 'untitled';
+        if (p.printer) {
+          document.getElementById('printerSelect').value = p.printer;
+          onPrinterChange();
+        }
+        const s = p.settings || {};
+        if (s.physW)         document.getElementById('physW').value         = s.physW;
+        if (s.physH)         document.getElementById('physH').value         = s.physH;
+        if (s.layerH)        document.getElementById('layerH').value        = s.layerH;
+        if (s.nozzle)        document.getElementById('nozzleD').value       = s.nozzle;
+        if (s.baseThick)     document.getElementById('baseThick').value     = s.baseThick;
+        if (s.designLayers)  document.getElementById('designLayers').value  = s.designLayers;
+        if (s.simplifyEps != null) document.getElementById('simplifyEps').value = s.simplifyEps;
+        if (s.numPerimeters) document.getElementById('numPerimeters').value = s.numPerimeters;
+        if (s.chaikinPasses != null) {
+          document.getElementById('chaikinPasses').value = s.chaikinPasses;
+          document.getElementById('chaikinVal').textContent = s.chaikinPasses + ' passes';
+        }
+        if (s.mirrorX  != null) document.getElementById('mirrorX').checked  = s.mirrorX;
+        if (s.includeBase != null) document.getElementById('includeBase').checked = s.includeBase;
+        const img = new Image();
+        img.onload = () => {
+          pushUndo();
+          const res = s.resolution || 600;
+          if (canvas.width !== res) {
+            document.getElementById('canvasRes').value = res;
+            initCanvas(res);
+          }
+          ctx.fillStyle = '#f5f5f0';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.drawImage(img,0,0,canvas.width,canvas.height);
+          updateInfo();
+          showToast(`✓ Loaded: ${p.name}`);
+        };
+        img.src = p.canvas;
+      } catch(err) {
+        showToast('ERROR loading project: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
+}
+
+
+// ══════════════════════════════════════════════════════
+//  LAYER PREVIEW
+// ══════════════════════════════════════════════════════
+let _layerData = null;
+
+async function openLayerPreview() {
+  const btn = document.getElementById('layerPreviewBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ SLICING...';
+  setTimeout(async () => {
+    try {
+      const s = getSettings();
+      const printer = getPrinterProfile(document.getElementById('printerSelect').value);
+      printer.filament = parseFloat(document.getElementById('gcFilDia').value) || 1.75;
+      _layerData = await buildLayerData(s, printer);
+      if (!_layerData || !_layerData.length) { showToast('⚠ No geometry — draw something first'); return; }
+      const total = _layerData.length;
+      const slider = document.getElementById('layerSlider');
+      slider.max = total; slider.value = total;
+      let totalE = 0;
+      _layerData.forEach(l => totalE += l.filament);
+      const estMin = Math.round(_layerData.reduce((a,l)=>a+l.time,0)/60);
+      document.getElementById('lsTotalLayers').textContent = total;
+      document.getElementById('lsFilament').textContent    = totalE.toFixed(1);
+      document.getElementById('lsTime').textContent        = estMin + ' min';
+      document.getElementById('layerModal').classList.add('open');
+      layerDraw(total);
+    } catch(e) { showToast('ERROR: '+e.message); console.error(e); }
+    finally { btn.disabled=false; btn.textContent='◈ PREVIEW'; }
+  }, 50);
+}
+
+function layerDraw(idx) {
+  if (!_layerData) return;
+  const ld = _layerData[idx-1]; if (!ld) return;
+  document.getElementById('layerNum').textContent = idx+' / '+_layerData.length;
+  const cv = document.getElementById('layerCanvas');
+  const lctx = cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  const s=ld.settings;
+  const margin=24, sc=Math.min((W-margin*2)/s.physW,(H-margin*2)/s.physH);
+  const ox=(W-s.physW*sc)/2, oy=(H-s.physH*sc)/2;
+  const tx=x=>ox+x*sc, ty=y=>H-oy-y*sc;
+  lctx.clearRect(0,0,W,H);
+  lctx.fillStyle='#0d0d10'; lctx.fillRect(0,0,W,H);
+  lctx.strokeStyle='rgba(255,255,255,.1)'; lctx.lineWidth=1;
+  lctx.strokeRect(tx(0),ty(s.physH),s.physW*sc,s.physH*sc);
+  for (let li=Math.max(0,idx-4);li<idx-1;li++) {
+    const a=0.06+0.03*(li-(idx-5));
+    drawLayerPaths(lctx,_layerData[li],tx,ty,a);
+  }
+  drawLayerPaths(lctx,ld,tx,ty,1);
+  lctx.fillStyle='rgba(100,200,100,.7)'; lctx.font='10px monospace';
+  lctx.fillText('Z = '+ld.z.toFixed(3)+' mm  |  '+(ld.isBase?'BASE':'DESIGN'), tx(0)+4, ty(s.physH)+14);
+}
+
+function drawLayerPaths(lctx,ld,tx,ty,alpha) {
+  if (alpha>=0.9) {
+    lctx.strokeStyle='rgba(255,60,60,'+(alpha*0.35)+')';
+    lctx.lineWidth=0.5; lctx.setLineDash([2,4]);
+    for (const seg of ld.travels) {
+      lctx.beginPath(); lctx.moveTo(tx(seg[0].x),ty(seg[0].y));
+      lctx.lineTo(tx(seg[1].x),ty(seg[1].y)); lctx.stroke();
+    }
+    lctx.setLineDash([]);
+  }
+  lctx.strokeStyle='rgba(80,255,180,'+(alpha*0.55)+')'; lctx.lineWidth=0.8;
+  for (const seg of ld.infill) {
+    lctx.beginPath(); lctx.moveTo(tx(seg[0].x),ty(seg[0].y));
+    lctx.lineTo(tx(seg[1].x),ty(seg[1].y)); lctx.stroke();
+  }
+  lctx.strokeStyle=ld.isBase?'rgba(120,120,120,'+(alpha*0.8)+')':'rgba(255,140,0,'+alpha+')';
+  lctx.lineWidth=alpha>=0.9?1.5:0.8;
+  for (const ring of ld.perimeters) {
+    lctx.beginPath(); lctx.moveTo(tx(ring[0].x),ty(ring[0].y));
+    for (let i=1;i<ring.length;i++) lctx.lineTo(tx(ring[i].x),ty(ring[i].y));
+    lctx.closePath(); lctx.stroke();
+  }
+}
+
+function offsetRingBy(ring, dist) {
+  const cx=ring.reduce((s,p)=>s+p.x,0)/ring.length;
+  const cy=ring.reduce((s,p)=>s+p.y,0)/ring.length;
+  return ring.map(p=>{const dx=p.x-cx,dy=p.y-cy,d=Math.sqrt(dx*dx+dy*dy)||1;return{x:p.x-(dx/d)*dist,y:p.y-(dy/d)*dist};});
+}
+
+function infillSegments(outerRings, pitch) {
+  let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
+  for (const r of outerRings) for (const p of r){if(p.x<minX)minX=p.x;if(p.x>maxX)maxX=p.x;if(p.y<minY)minY=p.y;if(p.y>maxY)maxY=p.y;}
+  const segs=[];
+  for (let y=minY+pitch/2;y<maxY;y+=pitch) {
+    const xs=[];
+    for (const ring of outerRings){const n=ring.length;for(let i=0;i<n;i++){const a=ring[i],b=ring[(i+1)%n];if((a.y<=y&&b.y>y)||(b.y<=y&&a.y>y)){const t=(y-a.y)/(b.y-a.y);xs.push(a.x+t*(b.x-a.x));}}}
+    xs.sort((a,b)=>a-b);
+    for(let i=0;i+1<xs.length;i+=2) segs.push([{x:xs[i],y},{x:xs[i+1],y}]);
+  }
+  return segs;
+}
+
+async function buildLayerData(s, printer) {
+  const contours = await buildContours(s);
+  if(!contours.length) return null;
+  const withArea=contours.map(c=>({c,a:signedArea(c),ab:Math.abs(signedArea(c))}));
+  withArea.sort((x,y)=>y.ab-x.ab);
+  const norm=[];
+  for(const item of withArea){
+    const ref=item.c[0];let isHole=false;
+    for(const prev of norm) if(prev.isOuter&&pointInPoly(ref.x,ref.y,prev.c)){isHole=true;break;}
+    let poly=item.c;
+    if(!isHole&&item.a<0)poly=[...poly].reverse();
+    if(isHole&&item.a>0)poly=[...poly].reverse();
+    norm.push({c:poly,isOuter:!isHole});
+  }
+  const outers=norm.filter(x=>x.isOuter).map(x=>x.c);
+  const layerH=s.layerH, nozzle=s.nozzle, extW=nozzle*1.1;
+  const filArea=Math.PI*(printer.filament/2)**2;
+  const sp=s.gcSpeedPrint||printer.speed_print;
+  const spFirst=s.gcSpeedFirst||printer.speed_first;
+  const midZ=s.includeBase?s.baseThick:0;
+  const topZ=midZ+s.designLayers*layerH;
+  const totalLayers=Math.round(topZ/layerH);
+  const baseLayers=Math.round(midZ/layerH);
+  const numPerim=s.numPerimeters||2;
+  const pitch=extW*1.05;
+  const extAmt=len=>(len*layerH*extW)/filArea;
+  const segLen=(a,b)=>Math.sqrt((b.x-a.x)**2+(b.y-a.y)**2);
+  const layers=[];
+  let cx=0,cy=0;
+  for(let layer=1;layer<=totalLayers;layer++){
+    const z=layer*layerH, isBase=layer<=baseLayers;
+    const perimeters=[],infill=[],travels=[];
+    let filament=0;
+    const addTravel=(x,y)=>{travels.push([{x:cx,y:cy},{x,y}]);cx=x;cy=y;};
+    const addLine=(x0,y0,x1,y1)=>{filament+=extAmt(segLen({x:x0,y:y0},{x:x1,y:y1}));cx=x1;cy=y1;};
+    if(isBase&&s.includeBase){
+      const br=[{x:0,y:0},{x:s.physW,y:0},{x:s.physW,y:s.physH},{x:0,y:s.physH}];
+      perimeters.push(br);
+      addTravel(br[0].x,br[0].y);
+      for(let i=1;i<=br.length;i++){const p=br[i%br.length];addLine(cx,cy,p.x,p.y);}
+      for(const seg of infillSegments([br],pitch)){addTravel(seg[0].x,seg[0].y);infill.push(seg);addLine(seg[0].x,seg[0].y,seg[1].x,seg[1].y);}
+    }
+    if(!isBase){
+      for(const ring of outers){
+        for(let pi=0;pi<numPerim;pi++){
+          const pRing=pi===0?ring:offsetRingBy(ring,pi*extW);
+          if(pRing.length<3)continue;
+          perimeters.push(pRing);
+          addTravel(pRing[0].x,pRing[0].y);
+          for(let i=1;i<=pRing.length;i++){const p=pRing[i%pRing.length];addLine(cx,cy,p.x,p.y);}
+        }
+      }
+      const innerRings=outers.map(r=>numPerim>1?offsetRingBy(r,(numPerim-1)*extW):r);
+      for(const seg of infillSegments(innerRings,pitch)){addTravel(seg[0].x,seg[0].y);infill.push(seg);addLine(seg[0].x,seg[0].y,seg[1].x,seg[1].y);}
+    }
+    const timeS=filament/sp*60;
+    const allRingsForPreview = norm.map(x=>x.c);
+    layers.push({z,isBase,perimeters,infill,travels,filament,time:timeS,settings:s,allRings:allRingsForPreview});
+  }
+  return layers;
+}
+
+
+// ══════════════════════════════════════════════════════
+//  BEZIER CURVE FITTING
+// ══════════════════════════════════════════════════════
+
+function bezierPoint(p0,p1,p2,p3,t) {
+  const mt=1-t, mt2=mt*mt, mt3=mt2*mt, t2=t*t, t3=t2*t;
+  return {
+    x: mt3*p0.x + 3*mt2*t*p1.x + 3*mt*t2*p2.x + t3*p3.x,
+    y: mt3*p0.y + 3*mt2*t*p1.y + 3*mt*t2*p2.y + t3*p3.y
+  };
+}
+
+function tessellateCubic(p0,p1,p2,p3, N) {
+  const pts=[];
+  for (let i=1;i<=N;i++) pts.push(bezierPoint(p0,p1,p2,p3,i/N));
+  return pts;
+}
+
+function chordParams(pts) {
+  const u=[0];
+  for (let i=1;i<pts.length;i++) {
+    const dx=pts[i].x-pts[i-1].x, dy=pts[i].y-pts[i-1].y;
+    u.push(u[i-1]+Math.sqrt(dx*dx+dy*dy));
+  }
+  const total=u[u.length-1]||1;
+  return u.map(v=>v/total);
+}
+
+function fitCubicSegment(pts, u, t1, t2) {
+  const n=pts.length;
+  if (n===2) {
+    const d=Math.sqrt((pts[1].x-pts[0].x)**2+(pts[1].y-pts[0].y)**2)/3;
+    return [pts[0], {x:pts[0].x+t1.x*d,y:pts[0].y+t1.y*d},
+                    {x:pts[1].x-t2.x*d,y:pts[1].y-t2.y*d}, pts[1]];
+  }
+  let C00=0,C01=0,C11=0,X0=0,X1=0;
+  for (let i=0;i<n;i++) {
+    const t=u[i], mt=1-t;
+    const b1=3*mt*mt*t, b2=3*mt*t*t;
+    const a0x=b1*t1.x, a0y=b1*t1.y;
+    const a1x=b2*t2.x, a1y=b2*t2.y;
+    C00+=a0x*a0x+a0y*a0y;
+    C01+=a0x*a1x+a0y*a1y;
+    C11+=a1x*a1x+a1y*a1y;
+    const bx=pts[i].x-(mt*mt*mt*pts[0].x+3*mt*mt*t*pts[0].x+3*mt*t*t*pts[n-1].x+t*t*t*pts[n-1].x);
+    const by=pts[i].y-(mt*mt*mt*pts[0].y+3*mt*mt*t*pts[0].y+3*mt*t*t*pts[n-1].y+t*t*t*pts[n-1].y);
+    X0+=a0x*bx+a0y*by;
+    X1+=a1x*bx+a1y*by;
+  }
+  const det=C00*C11-C01*C01;
+  const alpha0 = Math.abs(det)<1e-10 ? 0 : (X0*C11-X1*C01)/det;
+  const alpha1 = Math.abs(det)<1e-10 ? 0 : (C00*X1-C01*X0)/det;
+  const dmin = Math.sqrt((pts[n-1].x-pts[0].x)**2+(pts[n-1].y-pts[0].y)**2)/3;
+  const a0=alpha0>0?alpha0:dmin, a1=alpha1>0?alpha1:dmin;
+  return [
+    pts[0],
+    {x:pts[0].x+t1.x*a0, y:pts[0].y+t1.y*a0},
+    {x:pts[n-1].x-t2.x*a1, y:pts[n-1].y-t2.y*a1},
+    pts[n-1]
+  ];
+}
+
+function bezierMaxError(pts, u, bez) {
+  let maxErr=0, maxIdx=0;
+  for (let i=1;i<pts.length-1;i++) {
+    const q=bezierPoint(bez[0],bez[1],bez[2],bez[3],u[i]);
+    const dx=pts[i].x-q.x, dy=pts[i].y-q.y;
+    const e=dx*dx+dy*dy;
+    if(e>maxErr){maxErr=e;maxIdx=i;}
+  }
+  return {err:Math.sqrt(maxErr),idx:maxIdx};
+}
+
+function norm2(v){const l=Math.sqrt(v.x*v.x+v.y*v.y)||1;return{x:v.x/l,y:v.y/l};}
+
+function fitCubicRec(pts, tol, t1, t2, depth) {
+  const u=chordParams(pts);
+  const bez=fitCubicSegment(pts,u,t1,t2);
+  const {err,idx}=bezierMaxError(pts,u,bez);
+  if (err < tol || depth > 8) return [bez];
+  const mid=idx;
+  const left=pts.slice(0,mid+1), right=pts.slice(mid);
+  const tMid=norm2({x:pts[mid+1>pts.length-1?pts.length-1:mid+1].x-pts[mid===0?0:mid-1].x,
+                    y:pts[mid+1>pts.length-1?pts.length-1:mid+1].y-pts[mid===0?0:mid-1].y});
+  return [
+    ...fitCubicRec(left, tol, t1, tMid, depth+1),
+    ...fitCubicRec(right, tol, tMid, t2, depth+1)
+  ];
+}
+
+function bezierFitAndTessellate(pts, tol, tessN) {
+  if (pts.length < 4) return pts;
+  const n=pts.length;
+  const t1=norm2({x:pts[1].x-pts[0].x, y:pts[1].y-pts[0].y});
+  const t2=norm2({x:pts[n-1].x-pts[n-2].x, y:pts[n-1].y-pts[n-2].y});
+  let segments;
+  try {
+    segments = fitCubicRec(pts, tol, t1, t2, 0);
+  } catch(e) {
+    return pts;
+  }
+  const out=[pts[0]];
+  for (const seg of segments) {
+    out.push(...tessellateCubic(seg[0],seg[1],seg[2],seg[3], tessN));
+  }
+  return out;
+}
+
 // ══════════════════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════════════════
@@ -2703,12 +3399,10 @@ function showToast(msg) {
   showToast._t = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// Project title — no newlines, blur on Enter
 document.getElementById('projectTitle').addEventListener('keydown', e => {
   if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); }
 });
 
-// Keyboard shortcuts
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT') return;
   if (e.target.isContentEditable) return;
@@ -2721,7 +3415,6 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Delete') clearCanvas();
 });
 
-// Resize observer
 const ro = new ResizeObserver(fitCanvas);
 ro.observe(document.getElementById('canvasWrap'));
 
