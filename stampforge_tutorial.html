@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StampForge — Tutorial & Documentação</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #09090b;
+  --s1:     #111116;
+  --s2:     #18181f;
+  --s3:     #22222c;
+  --border: #2c2c38;
+  --acc:    #f07020;
+  --acc2:   #ffaa44;
+  --text:   #d0d0d8;
+  --dim:    #5a5a68;
+  --green:  #3ddc84;
+  --blue:   #4a9eff;
+  --mono:   'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; width: 220px; height: 100vh;
+  background: var(--s1); border-right: 1px solid var(--border);
+  padding: 32px 0; overflow-y: auto; z-index: 100;
+}
+.nav-logo {
+  padding: 0 20px 24px;
+  font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo em { color: var(--acc); font-style: normal; }
+.nav-logo small {
+  display: block; font-size: 9px; color: var(--dim);
+  letter-spacing: 1px; margin-top: 4px; font-weight: 400;
+}
+nav ul { list-style: none; padding: 20px 0; }
+nav li a {
+  display: block; padding: 6px 20px;
+  color: var(--dim); text-decoration: none;
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+  transition: color .15s, background .15s;
+  border-left: 2px solid transparent;
+}
+nav li a:hover { color: var(--text); background: var(--s2); }
+nav li a.active { color: var(--acc); border-left-color: var(--acc); background: var(--s2); }
+nav .nav-section {
+  font-size: 8px; letter-spacing: 2px; color: var(--dim);
+  padding: 16px 20px 4px; text-transform: uppercase;
+}
+
+/* ── LAYOUT ── */
+main {
+  margin-left: 220px;
+  max-width: 860px;
+  padding: 60px 48px 120px;
+}
+
+/* ── TYPOGRAPHY ── */
+h1 {
+  font-size: 28px; font-weight: 700; letter-spacing: 3px;
+  color: var(--text); margin-bottom: 8px;
+}
+h1 em { color: var(--acc); font-style: normal; }
+h2 {
+  font-size: 14px; font-weight: 700; letter-spacing: 2px;
+  color: var(--acc); text-transform: uppercase;
+  margin: 52px 0 16px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  color: var(--acc2); text-transform: uppercase;
+  margin: 28px 0 10px;
+}
+p { margin-bottom: 14px; color: var(--text); }
+a { color: var(--acc); text-decoration: none; }
+a:hover { text-decoration: underline; }
+strong { color: #fff; font-weight: 700; }
+code {
+  background: var(--s3); border: 1px solid var(--border);
+  padding: 1px 6px; border-radius: 3px;
+  font-family: var(--mono); font-size: 11px; color: var(--acc2);
+}
+
+/* ── HERO ── */
+.hero {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 32px 36px; margin-bottom: 40px;
+}
+.hero h1 { margin-bottom: 4px; }
+.hero .subtitle {
+  font-size: 11px; color: var(--dim); letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+.hero .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 1px;
+  padding: 4px 10px; border-radius: 3px; text-transform: uppercase;
+}
+.badge-orange { background: var(--acc); color: #000; }
+.badge-green  { background: var(--green); color: #000; }
+.badge-blue   { background: var(--blue); color: #000; }
+.badge-dim    { background: var(--s3); color: var(--dim); border: 1px solid var(--border); }
+
+/* ── STEPS ── */
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step {
+  display: grid; grid-template-columns: 48px 1fr;
+  gap: 0 20px; padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.step:last-child { border-bottom: none; }
+.step-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--acc); color: #000;
+  font-weight: 700; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.step-body h3 { margin-top: 0; }
+
+/* ── TABLE ── */
+table {
+  width: 100%; border-collapse: collapse;
+  margin: 16px 0 24px; font-size: 11px;
+}
+th {
+  text-align: left; padding: 8px 12px;
+  background: var(--s3); color: var(--acc);
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 8px 12px; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--s2); }
+td:first-child { color: var(--acc2); font-weight: 700; white-space: nowrap; }
+
+/* ── CALLOUTS ── */
+.callout {
+  border-left: 3px solid var(--acc);
+  background: var(--s2); padding: 14px 18px;
+  border-radius: 0 6px 6px 0; margin: 16px 0 24px;
+}
+.callout.green { border-left-color: var(--green); }
+.callout.blue  { border-left-color: var(--blue); }
+.callout-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.callout-title.orange { color: var(--acc); }
+.callout-title.green  { color: var(--green); }
+.callout-title.blue   { color: var(--blue); }
+
+/* ── KB GRID ── */
+.kb-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px; margin: 16px 0;
+}
+.kb-item {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 10px 14px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.kb-key {
+  background: var(--s3); border: 1px solid var(--border);
+  padding: 2px 8px; border-radius: 3px;
+  font-size: 10px; color: var(--acc2); font-weight: 700;
+  font-family: var(--mono);
+}
+.kb-action { font-size: 10px; color: var(--dim); }
+
+/* ── PIPELINE ── */
+.pipeline {
+  display: flex; align-items: center; gap: 0;
+  flex-wrap: wrap; margin: 16px 0 24px;
+}
+.pipe-step {
+  background: var(--s3); border: 1px solid var(--border);
+  padding: 8px 14px; font-size: 10px; color: var(--text);
+  white-space: nowrap;
+}
+.pipe-step:first-child { border-radius: 4px 0 0 4px; }
+.pipe-step:last-child  { border-radius: 0 4px 4px 0; }
+.pipe-arrow {
+  color: var(--acc); font-size: 14px; padding: 0 4px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--s2); height: 38px;
+  display: flex; align-items: center;
+}
+
+/* ── TOOL GRID ── */
+.tool-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px; margin: 16px 0;
+}
+.tool-card {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 14px;
+}
+.tool-icon { font-size: 20px; margin-bottom: 6px; }
+.tool-name { font-size: 10px; font-weight: 700; color: var(--text); }
+.tool-key  {
+  display: inline-block; font-size: 9px; color: #000;
+  background: var(--acc); padding: 1px 5px; border-radius: 2px;
+  margin-top: 4px; font-weight: 700;
+}
+.tool-desc { font-size: 10px; color: var(--dim); margin-top: 4px; }
+
+/* ── PRINTER GRID ── */
+.printer-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 6px; margin: 12px 0;
+}
+.printer-tag {
+  background: var(--s3); border: 1px solid var(--border);
+  border-radius: 4px; padding: 6px 12px;
+  font-size: 10px; color: var(--text);
+}
+
+/* ── WORKFLOW CARDS ── */
+.workflow-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px; margin: 16px 0;
+}
+.workflow-card {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px;
+}
+.workflow-card h3 { margin-top: 0; }
+.workflow-card ol { padding-left: 18px; margin: 10px 0 0; }
+.workflow-card li { font-size: 11px; color: var(--text); margin-bottom: 5px; }
+
+/* ── FOOTER ── */
+footer {
+  margin-left: 220px; padding: 24px 48px;
+  border-top: 1px solid var(--border);
+  font-size: 10px; color: var(--dim); letter-spacing: 1px;
+}
+footer em { color: rgba(200,150,50,.7); font-style: normal; }
+
+/* ── ACTIVE NAV via intersection ── */
+section { scroll-margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="nav-logo">
+    STAMP<em>FORGE</em>
+    <small>Tutorial &amp; Documentação</small>
+  </div>
+  <ul>
+    <li class="nav-section">Início</li>
+    <li><a href="#intro">O que é</a></li>
+    <li><a href="#quickstart">Quick Start</a></li>
+    <li class="nav-section">Interface</li>
+    <li><a href="#tools">Ferramentas</a></li>
+    <li><a href="#symmetry">Simetria</a></li>
+    <li><a href="#svg-import">Import SVG</a></li>
+    <li><a href="#image-import">Import Imagem</a></li>
+    <li class="nav-section">Parâmetros</li>
+    <li><a href="#physical">Tamanho Físico</a></li>
+    <li><a href="#print-settings">Print Settings</a></li>
+    <li><a href="#printers">Impressoras</a></li>
+    <li class="nav-section">Export</li>
+    <li><a href="#export-stl">STL</a></li>
+    <li><a href="#export-gcode">G-code</a></li>
+    <li><a href="#export-svg">SVG</a></li>
+    <li><a href="#layer-preview">Layer Preview</a></li>
+    <li><a href="#usb">USB Print</a></li>
+    <li class="nav-section">Outros</li>
+    <li><a href="#save-load">Guardar / Carregar</a></li>
+    <li><a href="#shortcuts">Atalhos</a></li>
+    <li><a href="#workflows">Workflows</a></li>
+    <li><a href="#technical">Técnico</a></li>
+  </ul>
+</nav>
+
+<!-- ── CONTENT ── -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>STAMP<em>FORGE</em></h1>
+    <div class="subtitle">v3.1 · Browser-based 3D stamp designer · Março 2026</div>
+    <div class="badge-row">
+      <span class="badge badge-orange">Single HTML File</span>
+      <span class="badge badge-green">No Install</span>
+      <span class="badge badge-blue">STL + GCODE + SVG</span>
+      <span class="badge badge-dim">Chrome / Edge</span>
+      <span class="badge badge-dim">Offline OK</span>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <section id="intro">
+    <h2>O que é o StampForge</h2>
+    <p>O StampForge é uma aplicação de design de carimbos para impressão 3D FDM que corre inteiramente no browser — sem instalação, sem servidor, sem conta. É um único ficheiro HTML.</p>
+    <p>Podes desenhar à mão livre ou com formas geométricas, importar SVGs vectoriais ou imagens raster, e exportar directamente para STL (para slicer) ou G-code (para imprimir sem slicer).</p>
+    <div class="pipeline">
+      <div class="pipe-step">Desenho / SVG / Imagem</div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">Máscara binária</div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">Traçado de contornos</div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">Douglas–Peucker</div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">Chaikin / Bézier</div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-step">Earcut → STL / GCODE / SVG</div>
+    </div>
+    <div class="callout">
+      <div class="callout-title orange">Requisito de browser</div>
+      Usa <strong>Chrome</strong> ou <strong>Edge</strong> para todas as funcionalidades incluindo impressão USB via Web Serial. Firefox e Safari funcionam para desenho e export de ficheiros, mas não suportam USB.
+    </div>
+  </section>
+
+  <!-- QUICK START -->
+  <section id="quickstart">
+    <h2>Quick Start</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Abrir o ficheiro</h3>
+          <p>Abre <code>stampforge_v31_preview.html</code> no Chrome ou Edge. Não precisas de servidor — funciona directamente do sistema de ficheiros.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Definir dimensões físicas</h3>
+          <p>No painel direito define <strong>Width</strong> e <strong>Height</strong> em milímetros (ex: 40 × 40 mm para um carimbo pequeno). Mantém a resolução em 600px para uso geral, ou sobe para 800–1024px para maior detalhe.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Desenhar o design</h3>
+          <p>Selecciona uma ferramenta na barra do topo e desenha na canvas branca. O lápis (<code>P</code>) é o ponto de partida. Usa simetria para designs centrados.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Verificar o toolpath</h3>
+          <p>Clica <strong>PREV</strong> para ver a visualização por camadas — confirma que o contorno está limpo e os detalhes têm espessura suficiente para o teu nozzle.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Exportar e imprimir</h3>
+          <p>Clica <strong>GCODE</strong> para exportar directamente, ou <strong>STL</strong> para importar no teu slicer favorito. Para impressão directa por USB clica <strong>USB</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools">
+    <h2>Ferramentas de Desenho</h2>
+    <p>Todas as ferramentas respeitam o modo de simetria activo e aplicam o traço ao <strong>canvas bitmap</strong>. O brush desenha a preto por defeito; podes mudar cor e tamanho no header.</p>
+
+    <div class="tool-grid">
+      <div class="tool-card">
+        <div class="tool-icon">✏️</div>
+        <div class="tool-name">Pencil</div>
+        <span class="tool-key">P</span>
+        <div class="tool-desc">Desenho livre contínuo ao arrastar</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">╱</div>
+        <div class="tool-name">Line</div>
+        <span class="tool-key">L</span>
+        <div class="tool-desc">Linha recta do ponto inicial ao final</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">▭</div>
+        <div class="tool-name">Rectangle</div>
+        <span class="tool-key">R</span>
+        <div class="tool-desc">Rectângulo contorno</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">▬</div>
+        <div class="tool-name">Filled Rect</div>
+        <span class="tool-key">Shift+R</span>
+        <div class="tool-desc">Rectângulo preenchido</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">◯</div>
+        <div class="tool-name">Ellipse</div>
+        <span class="tool-key">E</span>
+        <div class="tool-desc">Elipse / círculo contorno</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">⬤</div>
+        <div class="tool-name">Filled Ellipse</div>
+        <span class="tool-key">Shift+E</span>
+        <div class="tool-desc">Elipse / círculo preenchido</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">◪</div>
+        <div class="tool-name">Fill</div>
+        <span class="tool-key">F</span>
+        <div class="tool-desc">Flood fill — preenche área fechada</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">⬜</div>
+        <div class="tool-name">Eraser</div>
+        <span class="tool-key">X</span>
+        <div class="tool-desc">Apaga pixels (restaura fundo)</div>
+      </div>
+      <div class="tool-card">
+        <div class="tool-icon">A</div>
+        <div class="tool-name">Text</div>
+        <span class="tool-key">T</span>
+        <div class="tool-desc">Clica na canvas após seleccionar, escreve o texto</div>
+      </div>
+    </div>
+
+    <h3>Cor e tamanho do brush</h3>
+    <p>O selector de cor (quadrado colorido no header) abre o color picker nativo do browser. O campo numérico ao lado controla o tamanho do brush em pixeis.</p>
+
+    <h3>Undo / Redo</h3>
+    <p>Até <strong>30 passos</strong> de undo com <code>Ctrl+Z</code> e redo com <code>Ctrl+Y</code>. Também disponíveis nos botões ↩ ↪ da barra de ferramentas.</p>
+  </section>
+
+  <!-- SYMMETRY -->
+  <section id="symmetry">
+    <h2>Simetria</h2>
+    <p>Os dois botões de simetria na barra de ferramentas activam eixos de espelhamento em tempo real. Cada traço é replicado automaticamente para o lado oposto.</p>
+    <table>
+      <tr><th>Botão</th><th>Eixo</th><th>Efeito</th></tr>
+      <tr><td>⇔</td><td>Vertical (centro)</td><td>O que desenhas à esquerda aparece à direita</td></tr>
+      <tr><td>⇕</td><td>Horizontal (centro)</td><td>O que desenhas em cima aparece em baixo</td></tr>
+    </table>
+    <p>Podes activar os dois em simultâneo para simetria em 4 quadrantes. As guias laranja tracejadas mostram os eixos activos na canvas.</p>
+    <div class="callout green">
+      <div class="callout-title green">Dica</div>
+      Simetria vertical + horizontal é ideal para designs de carimbo centralizados como monogramas, flores, mandalas simples.
+    </div>
+  </section>
+
+  <!-- SVG IMPORT -->
+  <section id="svg-import">
+    <h2>Importar SVG</h2>
+    <p>Clica o botão <strong>⬆SVG</strong> na barra para abrir o modal de import. Selecciona um ficheiro <code>.svg</code>.</p>
+
+    <h3>Controlos de posicionamento</h3>
+    <table>
+      <tr><th>Controlo</th><th>Intervalo</th><th>Efeito</th></tr>
+      <tr><td>Scale</td><td>5% – 200%</td><td>Tamanho do SVG relativo à canvas</td></tr>
+      <tr><td>Position X</td><td>–100% – +100%</td><td>Deslocamento horizontal desde o centro</td></tr>
+      <tr><td>Position Y</td><td>–100% – +100%</td><td>Deslocamento vertical desde o centro</td></tr>
+      <tr><td>Invert colours</td><td>on / off</td><td>Inverte preto/branco — útil para SVGs com fundo escuro</td></tr>
+    </table>
+
+    <h3>Modos de import</h3>
+
+    <div class="workflow-cards">
+      <div class="workflow-card">
+        <h3>⬆ Importar SVG</h3>
+        <p style="font-size:11px;color:var(--dim)">Vector layer permanente</p>
+        <ol>
+          <li>O SVG fica numa layer separada <em>acima</em> do canvas bitmap</li>
+          <li>Aparece o badge laranja <strong>SVG VECTOR</strong> na canvas</li>
+          <li>Todos os exports usam o SVG de alta resolução merged com o bitmap</li>
+          <li>Podes desenhar com as ferramentas bitmap por baixo</li>
+          <li>Para remover: clica o badge <strong>SVG VECTOR</strong></li>
+        </ol>
+      </div>
+      <div class="workflow-card">
+        <h3>🖼 Converter Bitmap</h3>
+        <p style="font-size:11px;color:var(--dim)">Rasterização directa</p>
+        <ol>
+          <li>Aparece um slider extra <strong>B&amp;W threshold</strong> (10–245)</li>
+          <li>Ajusta o threshold para controlar onde corta o preto/branco</li>
+          <li>Ao confirmar, o SVG é rasterizado para o canvas bitmap</li>
+          <li>O estado SVG é descartado — podes editar livremente</li>
+          <li>Usa o eraser para limpar áreas indesejadas</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title orange">Layers no canvas</div>
+      Quando o modo Vector está activo existem três layers: <strong>bitmap</strong> (fundo, editável) → <strong>SVG</strong> (meio, vector persistente) → <strong>overlay</strong> (guias de simetria). O export merge automaticamente as duas layers de conteúdo.
+    </div>
+  </section>
+
+  <!-- IMAGE IMPORT -->
+  <section id="image-import">
+    <h2>Importar Imagem</h2>
+    <p>O botão 🖼 (ao lado do ⬆SVG) importa qualquer imagem raster — PNG, JPG, GIF, WebP. A imagem é escalada proporcionalmente para caber na canvas e composta sobre o desenho existente.</p>
+    <p>Usa o <strong>eraser</strong> para limpar fundos e áreas indesejadas. Aumenta o parâmetro <strong>Simplify</strong> se o contorno gerado tiver demasiados pontos após importar imagens com muito detalhe.</p>
+  </section>
+
+  <!-- PHYSICAL SIZE -->
+  <section id="physical">
+    <h2>Tamanho Físico &amp; Resolução</h2>
+    <table>
+      <tr><th>Parâmetro</th><th>Default</th><th>Notas</th></tr>
+      <tr><td>Width (mm)</td><td>60</td><td>Largura física do carimbo em milímetros</td></tr>
+      <tr><td>Height (mm)</td><td>60</td><td>Altura física do carimbo em milímetros</td></tr>
+      <tr><td>Resolution</td><td>600 px</td><td>Resolução do canvas — afecta qualidade de contorno</td></tr>
+    </table>
+    <p>Ao alterar a resolução, o desenho existente é reescalado para o novo tamanho. Usa <strong>800–1024 px</strong> para designs com texto pequeno ou linhas finas.</p>
+    <div class="callout blue">
+      <div class="callout-title blue">Regra prática</div>
+      Traço mínimo ≈ (dimensão mm / resolução px) × nozzle (mm). Com 60mm / 600px / 0.4mm nozzle o traço mínimo visível é ~0.04mm por pixel — muito inferior ao nozzle. Em prática, traços &lt; 2–3 pixeis podem não imprimir bem.
+    </div>
+  </section>
+
+  <!-- PRINT SETTINGS -->
+  <section id="print-settings">
+    <h2>Print Settings</h2>
+    <table>
+      <tr><th>Parâmetro</th><th>Default</th><th>Efeito</th></tr>
+      <tr><td>Layer Height</td><td>0.20 mm</td><td>Altura de cada camada FDM</td></tr>
+      <tr><td>Nozzle Size</td><td>0.40 mm</td><td>Afecta espessura mínima de feature no G-code</td></tr>
+      <tr><td>Base Thickness</td><td>1.2 mm</td><td>Espessura da placa de base sólida</td></tr>
+      <tr><td>Design Layers</td><td>2</td><td>Nº de camadas do relevo do design (altura = layers × layer H)</td></tr>
+      <tr><td>Mirror for stamp</td><td>✓</td><td>Espelha horizontalmente — necessário para que o carimbo imprima correctamente</td></tr>
+      <tr><td>Include base plate</td><td>✓</td><td>Adiciona base rectangular sólida ao STL</td></tr>
+      <tr><td>Perimeters</td><td>2</td><td>Número de shells de perímetro no G-code</td></tr>
+      <tr><td>Simplify (px)</td><td>0.8</td><td>Tolerância Douglas–Peucker — maior = menos pontos = curvas mais suaves mas menos fiéis</td></tr>
+      <tr><td>Curve smooth</td><td>3 passes</td><td>Subdivisão Chaikin — mais passes = curvas mais suaves</td></tr>
+    </table>
+    <div class="callout">
+      <div class="callout-title orange">Mirror for stamp</div>
+      Este checkbox é <strong>essencial</strong>. O carimbo precisa de ser impresso espelhado para que, ao ser usado, a imagem apareça correcta no papel. O STL e G-code exportados já incluem este espelhamento. O export SVG <strong>não</strong> é espelhado — representa o design original.
+    </div>
+  </section>
+
+  <!-- PRINTERS -->
+  <section id="printers">
+    <h2>Impressoras Suportadas</h2>
+    <p>18 perfis de impressora disponíveis no dropdown do painel Print Settings. Cada perfil inclui temperaturas, velocidades, retracção, fan, e G-code de início/fim.</p>
+    <div class="printer-grid">
+      <div class="printer-tag">Prusa i3 MK3S / MK3S+</div>
+      <div class="printer-tag">Prusa MK4</div>
+      <div class="printer-tag">Prusa MINI / MINI+</div>
+      <div class="printer-tag">Creality Ender-3 / V2</div>
+      <div class="printer-tag">Creality Ender-3 S1 / S1 Pro</div>
+      <div class="printer-tag">Creality CR-10 / CR-10S</div>
+      <div class="printer-tag">Creality CR-10 V2/V3</div>
+      <div class="printer-tag">Bambu Lab P1P / P1S</div>
+      <div class="printer-tag">Bambu Lab X1 / X1C</div>
+      <div class="printer-tag">Bambu Lab A1 / A1 Mini</div>
+      <div class="printer-tag">Artillery Sidewinder X1/X2</div>
+      <div class="printer-tag">Artillery Genius Pro</div>
+      <div class="printer-tag">Voron 2.4</div>
+      <div class="printer-tag">Voron Trident</div>
+      <div class="printer-tag">Anycubic Kobra / Kobra 2</div>
+      <div class="printer-tag">Elegoo Neptune 3 / 4</div>
+      <div class="printer-tag">Longer LK4 Pro (Klipper)</div>
+      <div class="printer-tag">Generic RepRap / Custom</div>
+    </div>
+  </section>
+
+  <!-- EXPORT STL -->
+  <section id="export-stl">
+    <h2>Export STL</h2>
+    <p>Clica <strong>STL</strong> no header para exportar um ficheiro STL binário watertight. Importa no teu slicer (PrusaSlicer, Bambu Studio, Cura, OrcaSlicer, etc.).</p>
+    <ul style="padding-left:20px;margin-bottom:14px">
+      <li>A face de design é o <strong>topo do modelo (Z+)</strong></li>
+      <li>Se <em>Mirror for stamp</em> estiver activo, a geometria já está espelhada — não mirrors no slicer</li>
+      <li>A base rectangular (se incluída) tem as dimensões físicas definidas</li>
+      <li>Alturas: base = Base Thickness, relevo = Design Layers × Layer Height</li>
+    </ul>
+    <div class="callout green">
+      <div class="callout-title green">No slicer</div>
+      Imprime com <strong>0% infill</strong> na base e <strong>100% na face de design</strong> para melhor qualidade de superficie. O G-code gerado pelo StampForge já aplica 100% de infill no design.
+    </div>
+  </section>
+
+  <!-- EXPORT GCODE -->
+  <section id="export-gcode">
+    <h2>Export G-code</h2>
+    <p>Exporta G-code pronto para imprimir — sem slicer. Selecciona o perfil de impressora antes de exportar.</p>
+    <ul style="padding-left:20px;margin-bottom:14px">
+      <li>Infill rectilíneo 100% na camada de design</li>
+      <li>Perímetros configuráveis (default 2)</li>
+      <li>Retracção, fan, temperaturas do perfil seleccionado</li>
+      <li>G-code de início e fim completo (homing, heating, purge line)</li>
+      <li>Compatível com Marlin e Klipper</li>
+    </ul>
+  </section>
+
+  <!-- EXPORT SVG -->
+  <section id="export-svg">
+    <h2>Export SVG</h2>
+    <p>Exporta um SVG vectorial limpo com paths em milímetros, viewBox correspondente ao tamanho físico.</p>
+    <ul style="padding-left:20px;margin-bottom:14px">
+      <li>Coordenadas em mm, não espelhado (design face original)</li>
+      <li>Se uma layer SVG estiver activa, é merged com o bitmap na exportação a 4× resolução</li>
+      <li>Usa para corte laser, vinil, ou edição em Inkscape / Illustrator</li>
+      <li><code>fill-rule="evenodd"</code> para furos correctos (letras com buracos, etc.)</li>
+    </ul>
+  </section>
+
+  <!-- LAYER PREVIEW -->
+  <section id="layer-preview">
+    <h2>Layer Preview</h2>
+    <p>Clica <strong>PREV</strong> para abrir o modal de visualização de camadas. Mostra o toolpath sliced com código de cores:</p>
+    <table>
+      <tr><th>Cor</th><th>Significado</th></tr>
+      <tr><td style="color:#f07020">Laranja</td><td>Perímetros (shells exteriores)</td></tr>
+      <tr><td style="color:#3ddc84">Verde</td><td>Infill</td></tr>
+      <tr><td style="color:#555">Cinzento</td><td>Movimentos de travel (sem extrusão)</td></tr>
+    </table>
+    <p>Usa o layer preview para verificar se o design tem espessura suficiente, se os detalhes finos vão ser impressos, e se as ilhas ficam correctamente conectadas.</p>
+  </section>
+
+  <!-- USB -->
+  <section id="usb">
+    <h2>Impressão USB Directa</h2>
+    <p>Requer <strong>Chrome ou Edge</strong> com Web Serial API. Funciona com Prusa MK3S por USB.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Ligar a impressora</h3>
+          <p>Conecta a Prusa MK3S ao computador por USB. Aguarda que o driver instale (o USB CDC já está no stack da impressora — não precisas de drivers extra).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Clicar USB no StampForge</h3>
+          <p>Clica <strong>USB</strong> no header. Abre o modal de impressão USB.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Conectar a porta</h3>
+          <p>Clica <strong>CONNECT USB</strong>. O browser mostra um selector de porta serial — selecciona a porta da impressora.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Imprimir</h3>
+          <p>Clica <strong>PRINT</strong>. O G-code é transmitido linha a linha com handshake <code>ok</code> — a impressora confirma cada comando antes do próximo ser enviado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAVE / LOAD -->
+  <section id="save-load">
+    <h2>Guardar e Carregar Projeto</h2>
+    <p>Os botões 💾 e 📂 no header guardam e restauram projectos completos.</p>
+    <table>
+      <tr><th>Acção</th><th>Resultado</th></tr>
+      <tr><td>💾 Save</td><td>Faz download de um ficheiro <code>.stampforge</code> (JSON) com todos os settings e a canvas como PNG embedded</td></tr>
+      <tr><td>📂 Load</td><td>Restaura um ficheiro <code>.stampforge</code> — repõe o desenho, dimensões, e todos os parâmetros</td></tr>
+    </table>
+    <p>O nome do projecto (editável no canto superior esquerdo da canvas) é incluído no nome do ficheiro exportado.</p>
+  </section>
+
+  <!-- SHORTCUTS -->
+  <section id="shortcuts">
+    <h2>Atalhos de Teclado</h2>
+    <div class="kb-grid">
+      <div class="kb-item"><span class="kb-action">Pencil</span><span class="kb-key">P</span></div>
+      <div class="kb-item"><span class="kb-action">Line</span><span class="kb-key">L</span></div>
+      <div class="kb-item"><span class="kb-action">Rectangle</span><span class="kb-key">R</span></div>
+      <div class="kb-item"><span class="kb-action">Filled rect</span><span class="kb-key">Shift+R</span></div>
+      <div class="kb-item"><span class="kb-action">Ellipse</span><span class="kb-key">E</span></div>
+      <div class="kb-item"><span class="kb-action">Filled ellipse</span><span class="kb-key">Shift+E</span></div>
+      <div class="kb-item"><span class="kb-action">Fill</span><span class="kb-key">F</span></div>
+      <div class="kb-item"><span class="kb-action">Eraser</span><span class="kb-key">X</span></div>
+      <div class="kb-item"><span class="kb-action">Text</span><span class="kb-key">T</span></div>
+      <div class="kb-item"><span class="kb-action">Undo</span><span class="kb-key">Ctrl+Z</span></div>
+      <div class="kb-item"><span class="kb-action">Redo</span><span class="kb-key">Ctrl+Y</span></div>
+      <div class="kb-item"><span class="kb-action">Clear canvas</span><span class="kb-key">Delete</span></div>
+    </div>
+  </section>
+
+  <!-- WORKFLOWS -->
+  <section id="workflows">
+    <h2>Workflows Recomendados</h2>
+
+    <div class="workflow-cards">
+      <div class="workflow-card">
+        <h3>Carimbo de raiz</h3>
+        <ol>
+          <li>Define dimensões (ex: 40 × 40 mm)</li>
+          <li>Activa <em>Mirror for stamp</em></li>
+          <li>Activa simetria vertical para design centrado</li>
+          <li>Desenha com pencil ou formas geométricas</li>
+          <li>Ajusta Simplify e Curve smooth</li>
+          <li>Clica PREV para verificar toolpath</li>
+          <li>Export GCODE → imprimir</li>
+        </ol>
+      </div>
+      <div class="workflow-card">
+        <h3>A partir de SVG (logo)</h3>
+        <ol>
+          <li>Clica ⬆SVG → selecciona ficheiro</li>
+          <li>Ajusta Scale e Position no modal</li>
+          <li>Se quiseres editar: <em>Converter Bitmap</em> + threshold</li>
+          <li>Se queres qualidade máxima: <em>Importar SVG</em></li>
+          <li>Desenha detalhes extra no bitmap se necessário</li>
+          <li>Export STL ou GCODE</li>
+        </ol>
+      </div>
+      <div class="workflow-card">
+        <h3>A partir de imagem raster</h3>
+        <ol>
+          <li>Clica 🖼 → selecciona PNG/JPG</li>
+          <li>A imagem é escalada para a canvas</li>
+          <li>Usa eraser para limpar o fundo</li>
+          <li>Aumenta Simplify se houver demasiados pontos</li>
+          <li>Verifica no PREV</li>
+          <li>Export</li>
+        </ol>
+      </div>
+      <div class="workflow-card">
+        <h3>SVG + detalhes desenhados</h3>
+        <ol>
+          <li>Importa SVG em modo <em>Vector</em></li>
+          <li>Selecciona pencil e desenha detalhes no bitmap</li>
+          <li>O export combina as duas layers automaticamente</li>
+          <li>Remove o SVG a qualquer altura clicando o badge laranja</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECHNICAL -->
+  <section id="technical">
+    <h2>Notas Técnicas</h2>
+    <table>
+      <tr><th>Componente</th><th>Implementação</th></tr>
+      <tr><td>Contour tracing</td><td>Half-pixel edge walking sobre máscara binária</td></tr>
+      <tr><td>Simplification</td><td>Douglas–Peucker recursivo</td></tr>
+      <tr><td>Smoothing</td><td>Chaikin corner cutting (0–8 passes) ou Bézier cúbico + tessellation</td></tr>
+      <tr><td>Triangulation</td><td>Earcut (embedded — sem dependências externas)</td></tr>
+      <tr><td>STL output</td><td>Binary STL, watertight, normais correctas, face de design Z+</td></tr>
+      <tr><td>G-code</td><td>Marlin/Klipper, infill rectilíneo, perímetros configuráveis</td></tr>
+      <tr><td>SVG merge</td><td>4× resolução, multiply blending + threshold antes do trace</td></tr>
+      <tr><td>Undo stack</td><td>ImageData snapshots, max 30 passos</td></tr>
+      <tr><td>Canvas layers</td><td>drawCanvas (bitmap) → svgCanvas (vector) → overlayCanvas (guias)</td></tr>
+    </table>
+
+    <h3>Compatibilidade de browser</h3>
+    <table>
+      <tr><th>Browser</th><th>Desenho</th><th>Export</th><th>USB Print</th></tr>
+      <tr><td>Chrome 90+</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>Edge 90+</td><td>✓</td><td>✓</td><td>✓</td></tr>
+      <tr><td>Firefox</td><td>✓</td><td>✓</td><td>✗</td></tr>
+      <tr><td>Safari</td><td>✓</td><td>✓</td><td>✗</td></tr>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  Idealized &amp; developed by <em>vibe coding with claude.ai</em>
+  &nbsp;·&nbsp; Centro de Inovação Carlos Fiolhais
+  &nbsp;·&nbsp; CDI Portugal
+  &nbsp;·&nbsp; Março 2026
+</footer>
+
+<script>
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('nav a');
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
