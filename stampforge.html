@@ -397,7 +397,7 @@ input[type=file]{display:none}
       <button class="tool-btn" onclick="redoAction()"  title="Redo [Ctrl+Y]">↪</button>
       <button class="tool-btn" onclick="clearCanvas()" title="Clear canvas">✕</button>
       <button class="tool-btn" onclick="importImage()" title="Import image">⬆</button>
-      <button class="tool-btn" onclick="openSvgImport()" title="Import SVG" style="color:var(--acc);font-size:9px;font-weight:700">SVG</button>
+      <button class="tool-btn" onclick="importImage()" title="Import SVG / image" style="color:var(--acc);font-size:9px;font-weight:700">SVG</button>
       <div class="pal-sep"></div>
       <button class="tool-btn" id="sym-v" onclick="toggleSym('v')" title="Mirror left↔right">⇔</button>
       <button class="tool-btn" id="sym-h" onclick="toggleSym('h')" title="Mirror top↔bottom">⇕</button>
@@ -439,8 +439,8 @@ input[type=file]{display:none}
     <div class="panel-section">
       <div class="section-title">⚙ Print Settings</div>
       <div class="quality-btns">
-        <button class="quality-btn" id="q-draft"    onclick="setPrintQuality('draft')"   title="Fast print — perimeters only, high speed">DRAFT<span>~3 min</span></button>
-        <button class="quality-btn active" id="q-standard" onclick="setPrintQuality('standard')" title="Balanced quality and speed">STD<span>~10 min</span></button>
+        <button class="quality-btn" id="q-draft"    onclick="setPrintQuality('draft')"   title="Fast print — solid surface, high speed">DRAFT<span>~8 min</span></button>
+        <button class="quality-btn active" id="q-standard" onclick="setPrintQuality('standard')" title="Balanced quality and speed">STD<span>~15 min</span></button>
         <button class="quality-btn" id="q-fine"     onclick="setPrintQuality('fine')"    title="Full detail — slow, best for complex designs">FINE<span>~50 min</span></button>
       </div>
       <div class="field"><label>Layer Height (mm)</label><input type="number" id="layerH" value="0.20" min="0.05" max="0.5" step="0.01"></div>
@@ -1067,7 +1067,7 @@ function clearCanvas() {
 // ─── Import image ──────────────────────────────────────
 function importImage() {
   const inp = document.createElement('input');
-  inp.type = 'file'; inp.accept = 'image/*';
+  inp.type = 'file'; inp.accept = 'image/*,.svg,image/svg+xml';
   inp.onchange = e => {
     const file = e.target.files[0];
     if (!file) return;
@@ -3711,10 +3711,10 @@ const QUALITY_PRESETS = {
     chaikinPasses: 2,
     bezierTess:    4,
     numPerimeters: 1,     // single shell
-    infillDensity: 0,     // NO infill — perimeters only
-    gcSpeedPrint:  80,    // fast
-    gcSpeedTravel: 200,
-    gcSpeedFirst:  30,
+    infillDensity: 1.0,   // solid surface — required for ink transfer
+    gcSpeedPrint:  100,   // fast
+    gcSpeedTravel: 250,
+    gcSpeedFirst:  35,
   },
   standard: {
     simplifyEps:   1.5,
@@ -3722,10 +3722,10 @@ const QUALITY_PRESETS = {
     bezierTol:     1.5,
     bezierTess:    8,
     numPerimeters: 2,
-    infillDensity: 0.25,  // 25% infill — structural but fast
-    gcSpeedPrint:  60,
-    gcSpeedTravel: 150,
-    gcSpeedFirst:  20,
+    infillDensity: 1.0,   // solid — stamps need full surface
+    gcSpeedPrint:  70,
+    gcSpeedTravel: 180,
+    gcSpeedFirst:  25,
   },
   fine: {
     simplifyEps:   0.8,
