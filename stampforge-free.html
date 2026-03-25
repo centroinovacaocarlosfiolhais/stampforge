@@ -323,7 +323,7 @@ input[type=file]{display:none}
 
 <!-- ─── HEADER ─────────────────────────────── -->
 <header>
-  <div class="logo">STAMP<em>FORGE</em></div>
+  <div class="logo">STAMP<em>FORGE</em> <span style="font-size:8px;background:#f80;color:#000;padding:1px 5px;border-radius:3px;letter-spacing:1px;font-weight:700;vertical-align:middle">FREE</span></div>
   <div class="sep"></div>
   <div class="hdr-right">
     <label class="tiny">COLOR</label>
@@ -337,11 +337,7 @@ input[type=file]{display:none}
   <div class="sep"></div>
   <button class="export-btn" style="background:var(--s3);color:var(--acc);border:1px solid var(--acc)" onclick="exportSVG()">SVG</button>
   <button class="export-btn" id="stlBtn" onclick="exportSTL()">STL</button>
-  <button class="export-btn" id="layerPreviewBtn" style="background:var(--s3);color:#4fc;border:1px solid #4fc" onclick="openLayerPreview()">PREV</button>
-  <button class="export-btn" id="gcodeBtn" style="background:var(--s3);color:#4fc;border:1px solid #4fc" onclick="exportGcode()">GCODE</button>
-  <div class="sep"></div>
-  <button class="export-btn" id="usbPrintBtn" style="background:var(--s3);color:#f80;border:1px solid #f80" onclick="openPrintModal()">USB</button>
-  <button class="export-btn" id="octoBtn" style="background:var(--s3);color:#4fc;border:1px solid #4fc" onclick="openOctoModal()">OCTOPRINT</button>
+
 </header>
 
 <!-- ─── MAIN ───────────────────────────────── -->
@@ -486,15 +482,6 @@ input[type=file]{display:none}
 
 <!-- Toast -->
 
-
-<!-- ── OctoPrint Modal ────────────────────────── -->
-<div id="octoModal">
-  <div id="octoBox">
-    <h2>◎ OCTOPRINT</h2>
-    <div class="octo-row">
-      <label>Host URL</label>
-      <input type="text" id="octoHost" value="http://octopi.local" placeholder="http://192.168.1.x or http://octopi.local">
-    </div>
     <div class="octo-row">
       <label>API Key</label>
       <input type="password" id="octoKey" placeholder="Paste your OctoPrint API key">
@@ -511,13 +498,6 @@ input[type=file]{display:none}
     </div>
   </div>
 </div>
-
-<!-- ── USB Print Modal ───────────────────────────── -->
-<div id="printModal">
-  <div id="printBox">
-    <h2>⚡ PRINT VIA USB — PRUSA MK3S</h2>
-    <div class="print-row">
-      <div class="print-stat">Status: <span id="pStat">disconnected</span></div>
       <div class="print-stat">Port: <span id="pPort">—</span></div>
     </div>
     <div id="printProgress"><div id="printProgressBar"></div></div>
@@ -598,7 +578,7 @@ input[type=file]{display:none}
     <button id="layerCloseBtn" onclick="document.getElementById('layerModal').classList.remove('open')">✕ CLOSE</button>
   </div>
 </div>
-<div id="creditsBar">Idealized &amp; developed by <em>vibe coding with claude.ai</em> &nbsp;·&nbsp; Centro de Inovação Carlos Fiolhais &nbsp;·&nbsp; CDI Portugal &nbsp;·&nbsp; Março 2026</div>
+<div id="creditsBar">Idealized &amp; developed by <em>vibe coding with claude.ai</em> &nbsp;·&nbsp; Centro de Inovação Carlos Fiolhais &nbsp;·&nbsp; CDI Portugal &nbsp;·&nbsp; Março 2026 &nbsp;·&nbsp; <em style="color:rgba(200,150,50,.4)">full version with GCODE + USB + OctoPrint available locally</em></div>
 <div id="toast">STL EXPORTED</div>
 
 <!-- Text input overlay (hidden) -->
@@ -615,7 +595,6 @@ let tool = 'pencil';
 let color = '#000000';
 let brushSize = 4;
 let isDrawing = false;
-let lastX = 0, lastY = 0;
 let symH = false; // horizontal axis mirror (top ↔ bottom)
 let symV = false; // vertical axis mirror  (left ↔ right)
 let startX = 0, startY = 0;
@@ -756,12 +735,7 @@ function getPos(e) {
   const r = canvas.getBoundingClientRect();
   const scaleX = canvas.width / r.width;
   const scaleY = canvas.height / r.height;
-  // Support mouse, touch, and pointer events
-  const src = e.touches && e.touches.length > 0
-    ? e.touches[0]
-    : e.changedTouches && e.changedTouches.length > 0
-      ? e.changedTouches[0]
-      : e;
+  const src = e.touches ? e.touches[0] : e;
   return {
     x: (src.clientX - r.left) * scaleX,
     y: (src.clientY - r.top)  * scaleY
@@ -770,40 +744,13 @@ function getPos(e) {
 
 // ─── Drawing handlers ─────────────────────────────────
 // Events on the draw canvas — overlay has pointer-events:none so it must NOT receive events
-// Mouse events
-canvas.addEventListener('mousedown',  onDown);
-canvas.addEventListener('mousemove',  onMove);
-canvas.addEventListener('mouseup',    onUp);
+canvas.addEventListener('mousedown', onDown);
+canvas.addEventListener('mousemove', onMove);
+canvas.addEventListener('mouseup', onUp);
 canvas.addEventListener('mouseleave', onUp);
-
-// Touch events — use changedTouches on end, prevent scroll/zoom
-canvas.addEventListener('touchstart', e => {
-  e.preventDefault();
-  onDown(e);
-}, { passive: false });
-
-canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
-  onMove(e);
-}, { passive: false });
-
-canvas.addEventListener('touchend', e => {
-  e.preventDefault();
-  // touchend has empty e.touches — use changedTouches
-  if (e.changedTouches && e.changedTouches.length > 0) {
-    const fakeEvent = {
-      clientX: e.changedTouches[0].clientX,
-      clientY: e.changedTouches[0].clientY,
-      touches: e.changedTouches,
-    };
-    onUp(fakeEvent);
-  } else {
-    onUp(e);
-  }
-}, { passive: false });
-
-// Prevent long-press context menu on touch devices
-canvas.addEventListener('contextmenu', e => e.preventDefault());
+canvas.addEventListener('touchstart', e => { e.preventDefault(); onDown(e); }, {passive:false});
+canvas.addEventListener('touchmove',  e => { e.preventDefault(); onMove(e); }, {passive:false});
+canvas.addEventListener('touchend',   e => { e.preventDefault(); onUp(e);   }, {passive:false});
 
 // Single safe refresh — no recursion
 function refreshUI() { updatePreview(); updateInfo(); drawSymmetryGuides(); }
@@ -862,10 +809,8 @@ function onDown(e) {
   pushUndo();
   isDrawing = true;
   startX = p.x; startY = p.y;
-  lastX = p.x; lastY = p.y;
   savedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  // Pencil: draw initial dot. Eraser: skip initial dot (prevents ghost point).
-  if (tool === 'pencil') {
+  if (tool === 'pencil' || tool === 'eraser') {
     strokeLine(p.x, p.y, p.x + 0.1, p.y);
   }
 }
@@ -877,8 +822,7 @@ function onMove(e) {
 
   if (!isDrawing) return;
   if (tool === 'pencil' || tool === 'eraser') {
-    strokeLine(lastX, lastY, p.x, p.y);
-    lastX = p.x; lastY = p.y;
+    strokeLine(startX, startY, p.x, p.y);
     startX = p.x; startY = p.y;
   } else {
     // Shape preview — restore then draw all mirror copies
@@ -3597,6 +3541,12 @@ async function octoSend() {
   btn.textContent = '▶ SLICE & PRINT';
 }
 
+
+// ── Stubbed in free/Railway build ─────────────────────
+function exportGcode()    { showToast('GCODE export available in local version'); }
+function openPrintModal() { showToast('USB print available in local version'); }
+function openOctoModal()  { showToast('OctoPrint available in local version'); }
+function openLayerPreview(){ showToast('Layer preview available in local version'); }
 // ══════════════════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════════════════
