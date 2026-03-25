@@ -77,6 +77,20 @@ header{
 }
 label.tiny{color:var(--dim);font-size:11px;white-space:nowrap}
 
+
+/* Print quality selector */
+.quality-btns{display:flex;gap:4px;margin-bottom:6px}
+.quality-btn{
+  flex:1;height:38px;border:1px solid var(--border);background:var(--s3);
+  color:var(--dim);border-radius:6px;cursor:pointer;
+  font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:1px;
+  transition:.15s;touch-action:manipulation;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+}
+.quality-btn:hover{border-color:var(--acc-dim);color:var(--acc)}
+.quality-btn.active{background:var(--acc-dim);border-color:var(--acc);color:var(--acc)}
+.quality-btn span{font-size:8px;font-weight:400;opacity:.7}
+
 /* Brush preset buttons */
 .brush-preset{
   width:42px;height:42px;border:1px solid var(--border);background:var(--s3);
@@ -424,6 +438,11 @@ input[type=file]{display:none}
     <!-- Print settings -->
     <div class="panel-section">
       <div class="section-title">⚙ Print Settings</div>
+      <div class="quality-btns">
+        <button class="quality-btn" id="q-draft"    onclick="setPrintQuality('draft')"   title="Fast print — perimeters only, high speed">DRAFT<span>~3 min</span></button>
+        <button class="quality-btn active" id="q-standard" onclick="setPrintQuality('standard')" title="Balanced quality and speed">STD<span>~10 min</span></button>
+        <button class="quality-btn" id="q-fine"     onclick="setPrintQuality('fine')"    title="Full detail — slow, best for complex designs">FINE<span>~50 min</span></button>
+      </div>
       <div class="field"><label>Layer Height (mm)</label><input type="number" id="layerH" value="0.20" min="0.05" max="0.5" step="0.01"></div>
       <div class="field"><label>Nozzle Size (mm)</label><input type="number" id="nozzleD" value="0.40" min="0.2" max="1.2" step="0.05"></div>
       <div class="field"><label>Base Thickness</label><input type="number" id="baseThick" value="1.2" min="0.4" max="5.0" step="0.2"></div>
@@ -2623,7 +2642,9 @@ async function generateGcode(s, printer) {
 
   // Rectilinear infill for outer contours at current Z
   function printInfill(outerRings, layer, angle=0) {
-    const pitch = extW * 1.05;
+    const density = (typeof window._infillDensity === 'number' ? window._infillDensity : 1.0);
+    if (density <= 0) return; // perimeters only — skip infill
+    const pitch = extW * 1.05 / Math.max(density, 0.05);
     // Bounding box of all rings
     let minX=Infinity,maxX=-Infinity,minY=Infinity,maxY=-Infinity;
     for (const r of outerRings)
@@ -3364,7 +3385,8 @@ async function buildLayerData(s, printer) {
   const totalLayers=Math.round(topZ/layerH);
   const baseLayers=Math.round(midZ/layerH);
   const numPerim=s.numPerimeters||2;
-  const pitch=extW*1.05;
+  const _density = (typeof window._infillDensity === 'number' ? window._infillDensity : 1.0);
+  const pitch = _density <= 0 ? Infinity : extW * 1.05 / Math.max(_density, 0.05);
   const extAmt=len=>(len*layerH*extW)/filArea;
   const segLen=(a,b)=>Math.sqrt((b.x-a.x)**2+(b.y-a.y)**2);
   const layers=[];
@@ -3393,7 +3415,7 @@ async function buildLayerData(s, printer) {
         }
       }
       const innerRings=outers.map(r=>numPerim>1?offsetRingBy(r,(numPerim-1)*extW):r);
-      for(const seg of infillSegments(innerRings,pitch)){addTravel(seg[0].x,seg[0].y);infill.push(seg);addLine(seg[0].x,seg[0].y,seg[1].x,seg[1].y);}
+      if (_density > 0) { for(const seg of infillSegments(innerRings,pitch)){addTravel(seg[0].x,seg[0].y);infill.push(seg);addLine(seg[0].x,seg[0].y,seg[1].x,seg[1].y);} }
     }
     const timeS=filament/sp*60;
     // allRings for preview even-odd fill: all original contours (outers + holes)
@@ -3672,6 +3694,87 @@ async function usbPurge() {
   pStat('disconnected');
   pPort('—');
 }
+
+
+// ══════════════════════════════════════════════════════
+//  PRINT QUALITY PRESETS
+// ══════════════════════════════════════════════════════
+
+// infillDensity: 0 = perimeters only, 1 = full solid
+// Stored as s.infillDensity and used in generateGcode + buildLayerData
+let _printQuality = 'standard';
+
+const QUALITY_PRESETS = {
+  draft: {
+    simplifyEps:   3.0,   // aggressive simplification
+    smoothMode:    'chaikin',
+    chaikinPasses: 2,
+    bezierTess:    4,
+    numPerimeters: 1,     // single shell
+    infillDensity: 0,     // NO infill — perimeters only
+    gcSpeedPrint:  80,    // fast
+    gcSpeedTravel: 200,
+    gcSpeedFirst:  30,
+  },
+  standard: {
+    simplifyEps:   1.5,
+    smoothMode:    'bezier',
+    bezierTol:     1.5,
+    bezierTess:    8,
+    numPerimeters: 2,
+    infillDensity: 0.25,  // 25% infill — structural but fast
+    gcSpeedPrint:  60,
+    gcSpeedTravel: 150,
+    gcSpeedFirst:  20,
+  },
+  fine: {
+    simplifyEps:   0.8,
+    smoothMode:    'bezier',
+    bezierTol:     1.0,
+    bezierTess:    16,
+    numPerimeters: 3,
+    infillDensity: 1.0,   // 100% solid
+    gcSpeedPrint:  40,
+    gcSpeedTravel: 120,
+    gcSpeedFirst:  15,
+  },
+};
+
+function setPrintQuality(q) {
+  _printQuality = q;
+  const p = QUALITY_PRESETS[q];
+  if (!p) return;
+
+  // Update quality button states
+  document.querySelectorAll('.quality-btn').forEach(b => b.classList.remove('active'));
+  const qBtn = document.getElementById('q-' + q);
+  if (qBtn) qBtn.classList.add('active');
+
+  // Apply settings to UI fields
+  document.getElementById('simplifyEps').value   = p.simplifyEps;
+  document.getElementById('smoothMode').value    = p.smoothMode;
+  updateSmoothUI();
+
+  if (p.smoothMode === 'chaikin')
+    document.getElementById('chaikinPasses').value = p.chaikinPasses;
+  if (p.smoothMode === 'bezier' && p.bezierTess)
+    document.getElementById('bezierTess').value = p.bezierTess;
+  if (p.bezierTol)
+    document.getElementById('bezierTol').value = p.bezierTol;
+
+  document.getElementById('numPerimeters').value   = p.numPerimeters;
+  document.getElementById('gcSpeedPrint').value    = p.gcSpeedPrint;
+  document.getElementById('gcSpeedTravel').value   = p.gcSpeedTravel;
+  document.getElementById('gcSpeedFirst').value    = p.gcSpeedFirst;
+
+  // Store infill density so gcode engine picks it up
+  window._infillDensity = p.infillDensity;
+
+  showToast('Quality: ' + q.toUpperCase() + ' — infill ' + Math.round(p.infillDensity*100) + '%');
+}
+
+// Init default
+window._infillDensity = QUALITY_PRESETS.standard.infillDensity;
 
 // ══════════════════════════════════════════════════════
 //  HELPERS
